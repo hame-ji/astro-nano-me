@@ -9,23 +9,23 @@ export const SITE: Site = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Home",
-  DESCRIPTION: "Astro Nano is a minimal and lightweight blog and portfolio.",
+  TITLE: "Accueil",
+  DESCRIPTION: "Blog et portfolio de RAM-4.",
 };
 
 export const BLOG: Metadata = {
   TITLE: "Blog",
-  DESCRIPTION: "A collection of articles on topics I am passionate about.",
+  DESCRIPTION: "Des articles sur ce qui m'intéresse autour du dev et du web.",
 };
 
 export const WORK: Metadata = {
-  TITLE: "Work",
-  DESCRIPTION: "Where I have worked and what I have done.",
+  TITLE: "Expériences",
+  DESCRIPTION: "Où j'ai travaillé et ce que j'y ai fait.",
 };
 
 export const PROJECTS: Metadata = {
-  TITLE: "Projects",
-  DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
+  TITLE: "Projets",
+  DESCRIPTION: "Mes expérimentations et mes projets en cours.",
 };
 
 export const SOCIALS: Socials = [
