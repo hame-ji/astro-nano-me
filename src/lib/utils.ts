@@ -20,20 +20,18 @@ export function readingTime(html: string) {
   return `${readingTimeMinutes} min`;
 }
 
-export function dateRange(startDate: Date, endDate?: Date | string): string {
+export function dateRange(startDate: Date, endDate: Date | string): string {
   const startMonth = startDate.toLocaleString("fr-FR", { month: "long" });
   const startYear = startDate.getFullYear().toString();
   let endMonth;
   let endYear;
 
-  if (endDate) {
-    if (typeof endDate === "string") {
-      endMonth = "";
-      endYear = endDate;
-    } else {
-      endMonth = endDate.toLocaleString("fr-FR", { month: "long" });
-      endYear = endDate.getFullYear().toString();
-    }
+  if (typeof endDate === "string") {
+    endMonth = "";
+    endYear = endDate;
+  } else {
+    endMonth = endDate.toLocaleString("fr-FR", { month: "long" });
+    endYear = endDate.getFullYear().toString();
   }
 
   return `${startMonth} ${startYear} - ${endMonth} ${endYear}`;
