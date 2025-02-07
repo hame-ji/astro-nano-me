@@ -29,10 +29,30 @@ export function dateRange(startDate: Date, endDate: Date | string): string {
   if (typeof endDate === "string") {
     endMonth = "";
     endYear = endDate;
+    endDate = new Date();
   } else {
     endMonth = endDate.toLocaleString("fr-FR", { month: "long" });
     endYear = endDate.getFullYear().toString();
   }
 
-  return `${startMonth} ${startYear} - ${endMonth} ${endYear}`;
+  return `${startMonth} ${startYear} - ${endMonth} ${endYear} • ${getElapsedTime(startDate, endDate)}`;
+}
+
+function getElapsedTime(startDate: Date, endDate: Date): string {
+  const formatDuration = (years: number, months: number): string => {
+      const yearString = years === 1 ? "an" : "ans";
+      return months === 0
+        ?  `${years} ${yearString}`
+        : `${years} ${yearString}, ${months} mois`;
+  };
+
+  const years = endDate.getFullYear() - startDate.getFullYear();
+  const months = endDate.getMonth() - startDate.getMonth();
+  
+  
+  if (months < 0) {
+      return formatDuration(years - 1, months + 12);
+  }
+  
+  return formatDuration(years, months);
 }
