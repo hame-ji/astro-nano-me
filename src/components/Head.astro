@@ -24,14 +24,18 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/x-icon" href=`${import.meta.env.BASE_URL}/favicon.ico`>
+<link
+  rel="icon"
+  type="image/x-icon"
+  href=`${import.meta.env.BASE_URL}/favicon.ico`
+/>
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -55,14 +59,15 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<ViewTransitions  />
+<ViewTransitions />
 
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   document.addEventListener("astro:before-swap", (e) =>
     [
       ...(e as TransitionBeforeSwapEvent).newDocument.head.querySelectorAll(
-        "link[as=\"font\"]"
+        // eslint-disable-next-line quotes
+        'link[as="font"]'
       ),
     ].forEach((link) => link.remove())
   );
@@ -98,13 +103,13 @@ const { title, description, image = "/nano.png" } = Astro.props;
       toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
     });
 
-    window.matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", event => {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => {
         if (localStorage.theme === "system") {
           toggleTheme(event.matches);
         }
-      }
-    );
+      });
 
     document.addEventListener("scroll", onScroll);
   }
@@ -131,11 +136,11 @@ const { title, description, image = "/nano.png" } = Astro.props;
     event.preventDefault();
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
-function toggleTheme(dark) {
+  function toggleTheme(dark) {
     const css = document.createElement("style");
 
     css.appendChild(
@@ -147,7 +152,7 @@ function toggleTheme(dark) {
              -ms-transition: none !important;
              transition: none !important;
           }
-        `,
+        `
       )
     );
 
@@ -159,7 +164,7 @@ function toggleTheme(dark) {
       document.documentElement.classList.remove("dark");
     }
 
-  window.getComputedStyle(css).opacity;
+    window.getComputedStyle(css).opacity;
     document.head.removeChild(css);
   }
 

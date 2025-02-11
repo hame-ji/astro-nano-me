@@ -29,12 +29,12 @@ export const PROJECTS: Metadata = {
 };
 
 export const SOCIALS: Socials = [
-  { 
+  {
     NAME: "github",
-    HREF: "https://github.com/ram-4"
+    HREF: "https://github.com/ram-4",
   },
-  { 
+  {
     NAME: "linkedin",
     HREF: "https://www.linkedin.com/in/jonashamard/",
-  }
+  },
 ];

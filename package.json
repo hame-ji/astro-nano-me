@@ -12,7 +12,8 @@
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write \"src/**/*.{js,ts,astro,css,md}\""
   },
   "dependencies": {
     "@astrojs/check": "^0.5.9",
@@ -37,7 +38,9 @@
   },
   "devDependencies": {
     "husky": "^9.1.7",
-    "lint-staged": "^15.4.3"
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.0",
+    "prettier-plugin-astro": "^0.14.1"
   },
   "lint-staged": {
     "*.{js,ts,astro,md}": [
