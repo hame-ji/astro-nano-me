@@ -43,7 +43,7 @@
     "prettier-plugin-astro": "^0.14.1"
   },
   "lint-staged": {
-    "*.{js,ts,astro,md}": [
+    "*.{js,ts,astro}": [
       "eslint --fix"
     ]
   }
