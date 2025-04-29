@@ -9,7 +9,7 @@ _Générer une lettre de motivation personnalisée depuis un terminal !_
 
 ## Faire mieux
 
-J'avais une solution qui fonctionne pour m'aider à rédiger des lettres de motivation avec [motivation-mate](../../projects/project-1). Mais le niveau de simplicité d'utilisation était encore insuffisant pour moi. Lancer l'application, ouvrir un navigateur, copier-coller l'URL et cliquer sur le bouton "Copier" pour la sauvegarder dans le presse-papiers m'a semblé trop long à l'usage.
+J'avais une solution qui fonctionnait pour m'aider à rédiger des lettres de motivation avec [motivation-mate](../../projects/project-1). Mais le niveau de simplicité d'utilisation était encore insuffisant pour moi. Lancer l'application, ouvrir un navigateur, copier-coller l'URL et cliquer sur le bouton "Copier" pour la sauvegarder dans le presse-papiers m'a semblé trop long à l'usage.
 
 Ce que je cherchais, c'était une solution en une seule commande depuis un terminal : parce que j'en ai toujours un d'ouvert et que la navigation entre les applications avec des raccourcis est très rapide.
 
@@ -25,7 +25,7 @@ Beaucoup de mes pairs m'ont vanté l'expérience développeur de Go et j'avais e
 
 ## Démo
 
-Même si tout est expliqué en détail dans le [README](https://github.com/RAM-4/gogomate/blob/main/README.md), ci-dessous un petit exemple en action. On peut utiliser le script depuis le projet mais tout l'intérêt est de build le binaire et de le déplacer dans la path du système pour une utilisation globale. De cette façon (après une configuration minimale) on appelle la commande `gogomate gen "https://example.com/job-posting" "optional-company-name"` et c'est parti !
+Même si tout est expliqué en détail dans le [README](https://github.com/RAM-4/gogomate/blob/main/README.md), ci-dessous un petit exemple en action. On peut utiliser le script depuis le projet mais tout l'intérêt est de build le binaire et de le déplacer dans le path du système pour une utilisation globale. De cette façon (après une configuration minimale) on appelle la commande `gogomate gen "https://example.com/job-posting" "optional-company-name"` et c'est parti !
 
 ![GIF](./gogomatedemo.gif)
 
