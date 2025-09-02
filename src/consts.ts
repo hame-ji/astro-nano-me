@@ -1,7 +1,7 @@
 import type { Site, Metadata, Socials } from "@types";
 
 export const SITE: Site = {
-  NAME: "RAM-4",
+  NAME: "hame-ji",
   EMAIL: "contact@ram4.addy.io",
   NUM_POSTS_ON_HOMEPAGE: 3,
   NUM_WORKS_ON_HOMEPAGE: 2,
@@ -10,7 +10,7 @@ export const SITE: Site = {
 
 export const HOME: Metadata = {
   TITLE: "Accueil",
-  DESCRIPTION: "Blog et portfolio de RAM-4.",
+  DESCRIPTION: "Blog et portfolio de hame-ji.",
 };
 
 export const BLOG: Metadata = {
@@ -31,7 +31,7 @@ export const PROJECTS: Metadata = {
 export const SOCIALS: Socials = [
   {
     NAME: "github",
-    HREF: "https://github.com/ram-4",
+    HREF: "https://github.com/hame-ji",
   },
   {
     NAME: "linkedin",
