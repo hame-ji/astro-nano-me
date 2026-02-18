@@ -5,7 +5,14 @@ import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://hame-ji.github.io",
-  base: "/astro-nano-me",
+  base: process.env.DEPLOY === "true" ? "/astro-nano-me" : undefined,
   trailingSlash: "never",
   integrations: [mdx(), sitemap(), tailwind()],
+  i18n: {
+    locales: ["en", "fr"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: true,
+    },
+  },
 });
