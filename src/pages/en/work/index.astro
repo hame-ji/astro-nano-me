@@ -3,7 +3,10 @@ import { getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import { dateRange } from "@lib/utils";
-import { WORK } from "@consts";
+import { useTranslations } from "@i18n/utils";
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
 
 const collection = (await getCollection("work")).sort(
   (a, b) =>
@@ -18,11 +21,15 @@ const work = await Promise.all(
 );
 ---
 
-<PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
+<PageLayout
+  title={t("metadata.work.title")}
+  description={t("metadata.work.description")}
+  lang={lang}
+>
   <Container>
     <div class="space-y-10">
       <div class="animate font-semibold text-black dark:text-white">
-        Expériences 🛠️
+        {t("work.title")}
       </div>
       <ul class="flex flex-col space-y-4">
         {
@@ -46,10 +53,6 @@ const work = await Promise.all(
           ))
         }
       </ul>
-      <!--
-      <ul class="animate flex flex-col gap-4">
-
-      </ul> -->
     </div>
   </Container>
 </PageLayout>

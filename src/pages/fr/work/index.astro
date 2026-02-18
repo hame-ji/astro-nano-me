@@ -1,0 +1,58 @@
+---
+import { getCollection } from "astro:content";
+import PageLayout from "@layouts/PageLayout.astro";
+import Container from "@components/Container.astro";
+import { dateRange } from "@lib/utils";
+import { useTranslations } from "@i18n/utils";
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const collection = (await getCollection("work")).sort(
+  (a, b) =>
+    new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf()
+);
+
+const work = await Promise.all(
+  collection.map(async (item) => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
+---
+
+<PageLayout
+  title={t("metadata.work.title")}
+  description={t("metadata.work.description")}
+  lang={lang}
+>
+  <Container>
+    <div class="space-y-10">
+      <div class="animate font-semibold text-black dark:text-white">
+        {t("work.title")}
+      </div>
+      <ul class="flex flex-col space-y-4">
+        {
+          work.map((entry, index) => (
+            <li class="animate">
+              <div class="text-md opacity-75">
+                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+              </div>
+              <div class="text-3xl tracking-wide font-semibold text-black dark:text-white">
+                {entry.data.company}
+              </div>
+              <div class="text-lg">{entry.data.role}</div>
+              <div class="text-md opacity-75">{entry.data.summary}</div>
+              <article>
+                <entry.Content />
+              </article>
+              {index < work.length - 1 && (
+                <hr class="my-4 border-t-4 border-dotted border-gray-200 dark:border-gray-800" />
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</PageLayout>

@@ -1,28 +1,45 @@
 ---
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
+import LanguageToggle from "@components/LanguageToggle.astro";
 import { SITE } from "@consts";
+import { useTranslations } from "@i18n/utils";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const homeUrl = getRelativeLocaleUrl(lang, "/").replace(/\/$/, "");
 ---
 
 <header>
   <Container>
     <div class="flex flex-wrap gap-y-2 justify-between">
-      <Link href={import.meta.env.BASE_URL} underline={false}>
+      <Link href={homeUrl} underline={false}>
         <div class="font-semibold">
           {SITE.NAME}
         </div>
       </Link>
-      <nav class="flex gap-1">
-        <Link href=`${import.meta.env.BASE_URL}/blog`> blog </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href=`${import.meta.env.BASE_URL}/work`> expériences </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href=`${import.meta.env.BASE_URL}/projects`> projets </Link>
-      </nav>
+      <div class="flex gap-2 items-center">
+        <nav class="flex gap-1">
+          <Link href={getRelativeLocaleUrl(lang, "/blog")}>
+            {t("nav.blog")}
+          </Link>
+          <span>
+            {`/`}
+          </span>
+          <Link href={getRelativeLocaleUrl(lang, "/work")}>
+            {t("nav.work")}
+          </Link>
+          <span>
+            {`/`}
+          </span>
+          <Link href={getRelativeLocaleUrl(lang, "/projects")}>
+            {t("nav.projects")}
+          </Link>
+        </nav>
+        <LanguageToggle />
+      </div>
     </div>
   </Container>
 </header>
