@@ -7,43 +7,39 @@ const pathname = Astro.url.pathname;
 const pathWithoutBase = base !== "/" ? pathname.replace(base, "") : pathname;
 const stripped = pathWithoutBase.replace(/^\/(en|fr)(?=\/|$)/, "");
 const currentPath = stripped.replace(/\/$/, "") || "/";
+const normalizedPath = currentPath === "/" ? "" : currentPath;
 
 const getAlternateUrl = (targetLang: string) => {
-  return getRelativeLocaleUrl(
-    targetLang,
-    currentPath === "/" ? "/" : currentPath
-  );
+  return getRelativeLocaleUrl(targetLang, normalizedPath);
 };
 ---
 
-<div
-  class="flex items-center gap-1.5 rounded-full border border-black/10 bg-white/70 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-black/70 backdrop-blur dark:border-white/15 dark:bg-black/40 dark:text-white/70"
->
+<div class="flex items-center gap-1 text-sm">
   <a
     href={getAlternateUrl("en")}
     class:list={[
-      "flex items-center gap-1 rounded-full px-1.5 py-0.5 transition-colors",
+      "flex items-center gap-0.5 transition-colors",
       lang === "en"
-        ? "bg-black/10 text-black dark:bg-white/20 dark:text-white"
-        : "hover:bg-black/5 hover:text-black dark:hover:bg-white/10 dark:hover:text-white",
+        ? "text-black dark:text-white"
+        : "text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white",
     ]}
     aria-label="Switch to English"
   >
-    <span class="text-xs">🫖</span>
+    <span>🫖</span>
     <span>EN</span>
   </a>
-  <div class="h-3 w-px bg-black/10 dark:bg-white/15"></div>
+  <span class="text-black/30 dark:text-white/30">/</span>
   <a
     href={getAlternateUrl("fr")}
     class:list={[
-      "flex items-center gap-1 rounded-full px-1.5 py-0.5 transition-colors",
+      "flex items-center gap-0.5 transition-colors",
       lang === "fr"
-        ? "bg-black/10 text-black dark:bg-white/20 dark:text-white"
-        : "hover:bg-black/5 hover:text-black dark:hover:bg-white/10 dark:hover:text-white",
+        ? "text-black dark:text-white"
+        : "text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white",
     ]}
     aria-label="Passer en français"
   >
-    <span class="text-xs">🥖</span>
+    <span>🥖</span>
     <span>FR</span>
   </a>
 </div>
