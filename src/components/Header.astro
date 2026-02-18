@@ -16,7 +16,12 @@ const homeUrl = getRelativeLocaleUrl(lang, "/").replace(/\/$/, "");
   <Container>
     <div class="flex flex-wrap gap-y-2 justify-between">
       <Link href={homeUrl} underline={false}>
-        <div class="font-semibold">
+        <div class="flex items-center gap-2 font-semibold">
+          <img
+            src={`${import.meta.env.BASE_URL}/favicon.ico`}
+            alt=""
+            class="w-5 h-5"
+          />
           {SITE.NAME}
         </div>
       </Link>
