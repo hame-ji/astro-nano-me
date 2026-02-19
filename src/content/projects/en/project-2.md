@@ -9,7 +9,7 @@ _Generate a personalized cover letter from a terminal!_
 
 ## Doing better
 
-I had a working solution to help me write cover letters with [motivation-mate](/en/projects/project-1). But the level of simplicity was still insufficient for me. Launching the application, opening a browser, copy-pasting the URL and clicking the "Copy" button to save it to the clipboard seemed too tedious in practice.
+I had a working solution to help me write cover letters with [motivation-mate](/astro-nano-me/en/projects/project-1). But the level of simplicity was still insufficient for me. Launching the application, opening a browser, copy-pasting the URL and clicking the "Copy" button to save it to the clipboard seemed too tedious in practice.
 
 What I was looking for was a single-command solution from a terminal: because I always have one open and navigating between applications with shortcuts is very fast.
 

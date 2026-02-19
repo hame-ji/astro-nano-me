@@ -7,6 +7,7 @@ import Link from "@components/Link.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, SOCIALS } from "@consts";
 import { useTranslations } from "@i18n/utils";
+import { ensureLeadingSlash } from "@lib/utils";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 const { lang: langProp } = Astro.props;
@@ -20,7 +21,9 @@ const blog = (await getCollection("blog"))
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
 const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft && project.id.startsWith(localePrefix))
+  .filter(
+    (project) => !project.data.draft && project.id.startsWith(localePrefix)
+  )
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
@@ -64,15 +67,17 @@ const work = await Promise.all(
           </p>
           <p class="animate">
             {t("home.intro3")}
-            <Link href={getRelativeLocaleUrl(lang, "/blog")}>
+            <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
               {t("nav.blog")}
             </Link>,
             {t("home.intro4")}
-            <Link href={getRelativeLocaleUrl(lang, "/work")}>
+            <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "work"))}>
               {t("nav.work")}
             </Link>
             {t("home.intro5")}
-            <Link href={getRelativeLocaleUrl(lang, "/projects")}>
+            <Link
+              href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "projects"))}
+            >
               {t("nav.projects")}
             </Link>
             !
@@ -85,7 +90,7 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             {t("home.latestPosts")}
           </h5>
-          <Link href={getRelativeLocaleUrl(lang, "/blog")}>
+          <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
             {t("home.allPosts")}
           </Link>
         </div>
@@ -105,7 +110,7 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             {t("home.workExperience")}
           </h5>
-          <Link href={getRelativeLocaleUrl(lang, "/work")}>
+          <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "work"))}>
             {t("home.details")}
           </Link>
         </div>
@@ -134,7 +139,9 @@ const work = await Promise.all(
           <h5 class="font-semibold text-black dark:text-white">
             {t("home.recentProjects")}
           </h5>
-          <Link href={getRelativeLocaleUrl(lang, "/projects")}>
+          <Link
+            href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "projects"))}
+          >
             {t("home.allProjects")}
           </Link>
         </div>

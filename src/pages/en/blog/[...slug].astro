@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime, slugFromId } from "@lib/utils";
+import { ensureLeadingSlash, readingTime, slugFromId } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import { useTranslations } from "@i18n/utils";
 import { getRelativeLocaleUrl } from "astro:i18n";
@@ -33,7 +33,7 @@ const { Content } = await post.render();
 >
   <Container>
     <div class="animate">
-      <BackToPrev href={getRelativeLocaleUrl(lang, "/blog")}>
+      <BackToPrev href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
         {t("backTo.blog")}
       </BackToPrev>
     </div>

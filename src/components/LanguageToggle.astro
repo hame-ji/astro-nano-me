@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { ensureLeadingSlash } from "@lib/utils";
 
 const lang = Astro.locals.lang;
 const base = import.meta.env.BASE_URL;
@@ -10,7 +11,7 @@ const currentPath = stripped.replace(/\/$/, "") || "/";
 const normalizedPath = currentPath === "/" ? "" : currentPath;
 
 const getAlternateUrl = (targetLang: string) => {
-  return getRelativeLocaleUrl(targetLang, normalizedPath);
+  return ensureLeadingSlash(getRelativeLocaleUrl(targetLang, normalizedPath));
 };
 ---
 

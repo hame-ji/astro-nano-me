@@ -9,7 +9,7 @@ _Générer une lettre de motivation personnalisée depuis un terminal !_
 
 ## Faire mieux
 
-J'avais une solution qui fonctionnait pour m'aider à rédiger des lettres de motivation avec [motivation-mate](/fr/projects/project-1). Mais le niveau de simplicité d'utilisation était encore insuffisant pour moi. Lancer l'application, ouvrir un navigateur, copier-coller l'URL et cliquer sur le bouton "Copier" pour la sauvegarder dans le presse-papiers m'a semblé trop long à l'usage.
+J'avais une solution qui fonctionnait pour m'aider à rédiger des lettres de motivation avec [motivation-mate](/astro-nano-me/fr/projects/project-1). Mais le niveau de simplicité d'utilisation était encore insuffisant pour moi. Lancer l'application, ouvrir un navigateur, copier-coller l'URL et cliquer sur le bouton "Copier" pour la sauvegarder dans le presse-papiers m'a semblé trop long à l'usage.
 
 Ce que je cherchais, c'était une solution en une seule commande depuis un terminal : parce que j'en ai toujours un d'ouvert et que la navigation entre les applications avec des raccourcis est très rapide.
 

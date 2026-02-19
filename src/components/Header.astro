@@ -4,12 +4,15 @@ import Link from "@components/Link.astro";
 import LanguageToggle from "@components/LanguageToggle.astro";
 import { SITE } from "@consts";
 import { useTranslations } from "@i18n/utils";
+import { ensureLeadingSlash } from "@lib/utils";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
-const homeUrl = getRelativeLocaleUrl(lang, "/").replace(/\/$/, "");
+const homeUrl = ensureLeadingSlash(
+  getRelativeLocaleUrl(lang, "/").replace(/\/$/, "")
+);
 ---
 
 <header>
@@ -27,19 +30,21 @@ const homeUrl = getRelativeLocaleUrl(lang, "/").replace(/\/$/, "");
       </Link>
       <div class="flex gap-2 items-center">
         <nav class="flex gap-1 text-sm">
-          <Link href={getRelativeLocaleUrl(lang, "/blog")}>
+          <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
             {t("nav.blog")}
           </Link>
           <span>
             {`/`}
           </span>
-          <Link href={getRelativeLocaleUrl(lang, "/work")}>
+          <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "work"))}>
             {t("nav.work")}
           </Link>
           <span>
             {`/`}
           </span>
-          <Link href={getRelativeLocaleUrl(lang, "/projects")}>
+          <Link
+            href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "projects"))}
+          >
             {t("nav.projects")}
           </Link>
         </nav>

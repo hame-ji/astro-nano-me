@@ -48,4 +48,4 @@ Et voilà !
 
 ## La suite
 
-Mais ... Cela ne m'a pas suffit. Je voulais quelque chose d'encore plus facile à utiliser : c'est ainsi qu'est né [gogomate](/fr/projects/project-2) !
+Mais ... Cela ne m'a pas suffit. Je voulais quelque chose d'encore plus facile à utiliser : c'est ainsi qu'est né [gogomate](/astro-nano-me/fr/projects/project-2) !

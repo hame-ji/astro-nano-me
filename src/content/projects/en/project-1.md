@@ -48,4 +48,4 @@ And there you go!
 
 ## What's next
 
-But... That wasn't enough for me. I wanted something even easier to use: this is how [gogomate](/en/projects/project-2) was born!
+But... That wasn't enough for me. I wanted something even easier to use: this is how [gogomate](/astro-nano-me/en/projects/project-2) was born!

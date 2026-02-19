@@ -14,6 +14,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function ensureLeadingSlash(path: string): string {
+  if (path.startsWith("/")) {
+    return path;
+  }
+  return `/${path}`;
+}
+
 export function formatDate(date: Date, lang = "fr") {
   return Intl.DateTimeFormat(localeFromLang(lang), {
     month: "long",

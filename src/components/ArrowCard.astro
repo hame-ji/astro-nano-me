@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { slugFromId } from "@lib/utils";
+import { ensureLeadingSlash, slugFromId } from "@lib/utils";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
@@ -12,9 +12,8 @@ const lang = Astro.locals.lang;
 ---
 
 <a
-  href={getRelativeLocaleUrl(
-    lang,
-    `/${entry.collection}/${slugFromId(entry.id)}`
+  href={ensureLeadingSlash(
+    getRelativeLocaleUrl(lang, `${entry.collection}/${slugFromId(entry.id)}`)
   )}
   class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
 >
