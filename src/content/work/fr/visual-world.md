@@ -1,8 +1,8 @@
 ---
 company: "Visual World"
 role: "Développeur web"
-dateStart: "02/01/2020"
-dateEnd: "01/01/2022"
+dateStart: "2020-01-02"
+dateEnd: "2022-01-01"
 summary: "Développement from scratch d'une web-app de gestion de projets sous forme de tableaux interactifs et visuels (SaaS)"
 ---
 

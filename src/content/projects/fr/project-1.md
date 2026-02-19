@@ -34,18 +34,18 @@ Depuis un certain temps, je voulais me mettre à React - parce que j'ai eu l'occ
 
 C'est ainsi qu'est né **motivation-mate**, une interface web qui permet de générer des lettres de motivation à partir d'offres d'emploi. Il suffit de copier l'URL de l'offre et la lettre de motivation est créée automatiquement !
 
-![Screenshot](./motivationmatedemo.png)
+![Screenshot](../motivationmatedemo.png)
 
 Une fois le contenu de la page récupéré, une requête à l'agent Mistral préalablement configuré est envoyée. C'est là que le cœur de l'application se trouve : il a fallu écrire un prompt précis et personnalisé pour que cet "agent" puisse produire des contenus de qualité mais surtout complètement personnalisés. Pour ce faire, il a fallu lui fournir des informations que j'ai jugées pertinentes à mettre en valeur pour une lettre de motivation (mon parcours, les technologies que j'ai utilisées, etc.). Et enfin, je lui ai fourni des couples d'input (contenu d'offre d'emploi) / output (lettres de motivation spécifiques à ce contenu) comme exemples de ce que je juge être un résultat satisfaisant :
 
-![Screenshot](./mistralagentdemo.jpg)
+![Screenshot](../mistralagentdemo.jpg)
 
 On récupère ensuite la réponse qui sera sauvegardée dans un fichier texte. On peut ensuite copier son contenu pour l'utiliser ou le modifier.
 
-![Screenshot](./motivationmatedemo2.jpg)
+![Screenshot](../motivationmatedemo2.jpg)
 
 Et voilà !
 
 ## La suite
 
-Mais ... Cela ne m'a pas suffit. Je voulais quelque chose d'encore plus facile à utiliser : c'est ainsi qu'est né [gogomate](../../projects/project-2) !
+Mais ... Cela ne m'a pas suffit. Je voulais quelque chose d'encore plus facile à utiliser : c'est ainsi qu'est né [gogomate](/fr/projects/project-2) !

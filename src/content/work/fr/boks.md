@@ -1,8 +1,8 @@
 ---
 company: "Boks"
 role: "Développeur web et mobile"
-dateStart: "03/01/2022"
-dateEnd: "01/01/2024"
+dateStart: "2022-01-03"
+dateEnd: "2024-01-01"
 summary: "Développement d'une application mobile cross-plateform de communication avec des objets connectés et de dashboards power-user de gestion / monitoring des données."
 ---
 
