@@ -1,7 +1,8 @@
 ---
 import HomePage from "@components/HomePage.astro";
+import { getLangFromUrl } from "@i18n/utils";
 
-const lang = Astro.locals.lang;
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <HomePage lang={lang} />

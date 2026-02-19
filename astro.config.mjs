@@ -6,9 +6,6 @@ export default defineConfig({
   site: "https://hame-ji.github.io/astro-nano-me",
   base: "/astro-nano-me",
   trailingSlash: "never",
-  redirects: {
-    "/": "/astro-nano-me/en",
-  },
   integrations: [mdx(), tailwind()],
   i18n: {
     locales: ["en", "fr"],
