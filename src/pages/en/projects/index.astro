@@ -9,7 +9,7 @@ const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
+  .filter((project) => !project.data.draft && project.id.startsWith("en/"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 

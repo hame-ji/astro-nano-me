@@ -1,12 +1,21 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+/** Derives a clean URL slug from a content entry id like "fr/01-init.md" → "01-init" */
+export function slugFromId(id: string): string {
+  return id.replace(/^[a-z]{2}\//, "").replace(/\.md$/, "");
+}
+
+export function localeFromLang(lang: string): string {
+  return lang === "fr" ? "fr-FR" : "en-US";
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: Date) {
-  return Intl.DateTimeFormat("fr-FR", {
+export function formatDate(date: Date, lang = "fr") {
+  return Intl.DateTimeFormat(localeFromLang(lang), {
     month: "long",
     day: "2-digit",
     year: "numeric",
@@ -20,8 +29,13 @@ export function readingTime(html: string) {
   return `${readingTimeMinutes} min`;
 }
 
-export function dateRange(startDate: Date, endDate: Date | string): string {
-  const startMonth = startDate.toLocaleString("fr-FR", { month: "long" });
+export function dateRange(
+  startDate: Date,
+  endDate: Date | string,
+  lang = "fr"
+): string {
+  const locale = localeFromLang(lang);
+  const startMonth = startDate.toLocaleString(locale, { month: "long" });
   const startYear = startDate.getFullYear().toString();
   let endMonth;
   let endYear;
@@ -31,19 +45,26 @@ export function dateRange(startDate: Date, endDate: Date | string): string {
     endYear = endDate;
     endDate = new Date();
   } else {
-    endMonth = endDate.toLocaleString("fr-FR", { month: "long" });
+    endMonth = endDate.toLocaleString(locale, { month: "long" });
     endYear = endDate.getFullYear().toString();
   }
 
-  return `${startMonth} ${startYear} - ${endMonth} ${endYear} • ${getElapsedTime(startDate, endDate)}`;
+  return `${startMonth} ${startYear} - ${endMonth} ${endYear} • ${getElapsedTime(startDate, endDate, lang)}`;
 }
 
-function getElapsedTime(startDate: Date, endDate: Date): string {
+function getElapsedTime(startDate: Date, endDate: Date, lang: string): string {
   const formatDuration = (years: number, months: number): string => {
-    const yearString = years === 1 ? "an" : "ans";
+    if (lang === "fr") {
+      const yearString = years === 1 ? "an" : "ans";
+      return months === 0
+        ? `${years} ${yearString}`
+        : `${years} ${yearString}, ${months} mois`;
+    }
+    const yearString = years === 1 ? "year" : "years";
+    const monthString = months === 1 ? "month" : "months";
     return months === 0
       ? `${years} ${yearString}`
-      : `${years} ${yearString}, ${months} mois`;
+      : `${years} ${yearString}, ${months} ${monthString}`;
   };
 
   const years = endDate.getFullYear() - startDate.getFullYear();

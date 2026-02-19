@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
 import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
+import { readingTime, slugFromId } from "@lib/utils";
 import BackToPrev from "@components/BackToPrev.astro";
 import { useTranslations } from "@i18n/utils";
 import { getRelativeLocaleUrl } from "astro:i18n";
@@ -13,10 +13,10 @@ const t = useTranslations(lang);
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
-    .filter((post) => !post.data.draft)
+    .filter((post) => !post.data.draft && post.id.startsWith("en/"))
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: slugFromId(post.id) },
     props: post,
   }));
 }
@@ -40,7 +40,7 @@ const { Content } = await post.render();
     <div class="space-y-1 my-10">
       <div class="animate flex items-center gap-1.5">
         <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} />
+          <FormattedDate date={post.data.date} lang={lang} />
         </div>
         &bull;
         <div class="font-base text-sm">

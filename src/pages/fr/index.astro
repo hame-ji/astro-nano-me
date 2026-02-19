@@ -13,16 +13,17 @@ const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 const blog = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
+  .filter((post) => !post.data.draft && post.id.startsWith("fr/"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
 const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
+  .filter((project) => !project.data.draft && project.id.startsWith("fr/"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
 const allwork = (await getCollection("work"))
+  .filter((item) => item.id.startsWith("fr/"))
   .sort(
     (a, b) =>
       new Date(b.data.dateStart).valueOf() -
@@ -110,7 +111,7 @@ const work = await Promise.all(
             work.map((entry) => (
               <li>
                 <div class="text-sm opacity-75">
-                  {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+                  {dateRange(entry.data.dateStart, entry.data.dateEnd, lang)}
                 </div>
                 <div class="font-semibold text-black dark:text-white">
                   {entry.data.company}
