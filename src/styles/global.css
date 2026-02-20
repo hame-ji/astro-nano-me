@@ -64,6 +64,10 @@ article {
   @apply opacity-100 translate-y-0;
 }
 
+h5 {
+  @apply font-pixel text-xs opacity-50;
+}
+
 html #back-to-top {
   @apply opacity-0 pointer-events-none;
 }
