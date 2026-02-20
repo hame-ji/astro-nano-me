@@ -1,0 +1,62 @@
+---
+import Link from "@components/Link.astro";
+
+interface Props {
+  content: string;
+  lang: string;
+}
+
+const { content, lang } = Astro.props;
+
+const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+function parseLinks(
+  text: string
+): Array<{ type: "text" | "link"; value: string; href?: string }> {
+  const parts: Array<{ type: "text" | "link"; value: string; href?: string }> =
+    [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ type: "text", value: text.slice(lastIndex, match.index) });
+    }
+
+    const linkText = match[1];
+    const href = match[2];
+
+    if (href.startsWith("/")) {
+      parts.push({ type: "link", value: linkText, href: `/${lang}${href}` });
+    } else {
+      parts.push({ type: "link", value: linkText, href });
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push({ type: "text", value: text.slice(lastIndex) });
+  }
+
+  return parts;
+}
+
+const paragraphs = content.split("\n\n");
+---
+
+{
+  paragraphs.map((paragraph) => (
+    <p class="animate">
+      {parseLinks(paragraph).map((part) =>
+        part.type === "link" ? (
+          <Link href={part.href!} external={!part.href!.startsWith("/")}>
+            {part.value}
+          </Link>
+        ) : (
+          part.value
+        )
+      )}
+    </p>
+  ))
+}

@@ -11,12 +11,8 @@ export const ui = {
     "nav.work": "experience",
     "nav.projects": "projects",
     "home.greeting": "👋🏻",
-    "home.intro1": "A personal page to have fun with",
-    "home.intro2":
-      "- a content-oriented web framework, experiment on the repo and talk about my projects!",
-    "home.intro3": "You can find what interested me during my watch in the",
-    "home.intro4": "section, the missions I carried out as a web developer in",
-    "home.intro5": "and what I'm working on my own in",
+    "home.intro":
+      "Full stack engineer now DevSecOps consultant : first and foremost driven by passion. Sharing my thoughts from time to time.",
     "home.latestPosts": "Latest posts",
     "home.allPosts": "All posts",
     "home.workExperience": "Work experience",
@@ -45,14 +41,8 @@ export const ui = {
     "nav.work": "expériences",
     "nav.projects": "projets",
     "home.greeting": "👋🏻",
-    "home.intro1": "Petite page perso pour m'amuser un peu avec",
-    "home.intro2":
-      "- un framework web orienté contenu, expérimenter des choses sur le repo et parler de mes projets !",
-    "home.intro3":
-      "Vous pouvez y trouver ce qui m'a intéressé lors de ma veille dans la partie",
-    "home.intro4":
-      ", les missions que j'ai effectuées en tant que développeur web dans",
-    "home.intro5": "et ce sur quoi je travaille de mon côté dans",
+    "home.intro":
+      "Développeur full stack maintenant consultant DevSecOps : je suis avant tout un passionné. Je partage mes pensées de temps en temps.",
     "home.latestPosts": "Dernières publications",
     "home.allPosts": "Toutes les publications",
     "home.workExperience": "Expériences professionnelles",
