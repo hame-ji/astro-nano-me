@@ -5,42 +5,41 @@ import { ensureLeadingSlash } from "@lib/utils";
 const lang = Astro.locals.lang;
 const base = import.meta.env.BASE_URL;
 const pathname = Astro.url.pathname;
+
 const pathWithoutBase = base !== "/" ? pathname.replace(base, "") : pathname;
 const stripped = pathWithoutBase.replace(/^\/(en|fr)(?=\/|$)/, "");
 const currentPath = stripped.replace(/\/$/, "") || "/";
 const normalizedPath = currentPath === "/" ? "" : currentPath;
 
-const getAlternateUrl = (targetLang: string) => {
-  return ensureLeadingSlash(getRelativeLocaleUrl(targetLang, normalizedPath));
-};
+const baseClass =
+  "flex items-center gap-1 rounded-full px-1.5 py-0.5 transition-[opacity,filter,background-color,color] duration-200 cursor-pointer";
+const activeClass = "bg-black/5 text-black/75 dark:bg-white/10 dark:text-white/80 opacity-100 blur-0";
+const inactiveClass =
+  "text-black/45 hover:text-black/65 dark:text-white/45 dark:hover:text-white/70 opacity-55 blur-[0.5px]";
+
+const getAlternateUrl = (targetLang: string) =>
+  ensureLeadingSlash(getRelativeLocaleUrl(targetLang, normalizedPath));
+
+const languages = [
+  { code: "en", label: "EN", emoji: "🫖", ariaLabel: "Switch to English" },
+  { code: "fr", label: "FR", emoji: "🥖", ariaLabel: "Passer en français" },
+];
 ---
 
-<div class="flex items-center gap-1 text-sm">
-  <a
-    href={getAlternateUrl("en")}
-    class:list={[
-      "flex items-center gap-0.5 transition-colors",
-      lang === "en"
-        ? "text-black dark:text-white"
-        : "text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white",
-    ]}
-    aria-label="Switch to English"
-  >
-    <span>🫖</span>
-    <span>EN</span>
-  </a>
-  <span class="text-black/30 dark:text-white/30">/</span>
-  <a
-    href={getAlternateUrl("fr")}
-    class:list={[
-      "flex items-center gap-0.5 transition-colors",
-      lang === "fr"
-        ? "text-black dark:text-white"
-        : "text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white",
-    ]}
-    aria-label="Passer en français"
-  >
-    <span>🥖</span>
-    <span>FR</span>
-  </a>
+<div
+  class="inline-flex items-center rounded-full border border-black/5 bg-transparent p-0.5 text-[10px] backdrop-blur-sm dark:border-white/10 dark:bg-transparent"
+  role="group"
+  aria-label="Language switch"
+>
+  {languages.map(({ code, label, emoji, ariaLabel }) => (
+    <a
+      href={getAlternateUrl(code)}
+      class:list={[baseClass, lang === code ? activeClass : inactiveClass]}
+      aria-label={ariaLabel}
+      aria-current={lang === code ? "page" : undefined}
+    >
+      <span>{emoji}</span>
+      <span>{label}</span>
+    </a>
+  ))}
 </div>
