@@ -1,5 +1,6 @@
 ---
 company: "Henix"
+logo: "/henix_logo.avif"
 role: "Ingénieur DevOps"
 dateStart: "2025-11-01"
 dateEnd: "Current"
@@ -12,9 +13,11 @@ summary: "Conception d'environnements cloud fiables, performants et sécurisés,
 - Développement et déploiement d'applications web full-stack (Angular, Vue.js, Node.js) avec PostgreSQL et MongoDB, avec ownership de bout en bout du code au cloud.
 
 ### Certifications
+
 - GCP Associate Cloud Engineer
 - GitLab PSE
 - CKA {en cours}
 
 ### Stack
+
 GCP, Scaleway, Terraform, Ansible, GitLab CI, Jenkins, Docker, Kubernetes, ArgoCD

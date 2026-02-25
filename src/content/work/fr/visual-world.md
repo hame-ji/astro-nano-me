@@ -1,5 +1,6 @@
 ---
 company: "Visual World"
+logo: "/visual_logo.png"
 role: "Développeur Web"
 dateStart: "2020-01-01"
 dateEnd: "2022-01-01"
@@ -11,7 +12,9 @@ summary: "Développement from-scratch d'un outil SaaS de gestion de projet sous 
 - Contribution full-stack au sein d'une petite équipe avec des mises en production fréquentes et une boucle de feedback rapide avec le client.
 
 ### Stack
+
 Javascript, Vue 2, Node, Express, Socket.io, MongoDB, Docker
 
 ### Liens
+
 - [Landing page](https://visual.world/)
