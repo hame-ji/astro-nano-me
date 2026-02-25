@@ -36,13 +36,29 @@ const work = await Promise.all(
       </div>
       <ul class="flex flex-col space-y-4">
         {
-          work.map((entry, index) => (
-            <li class="animate">
+           work.map((entry, index) => {
+            const logo = (entry.data as { logo?: string }).logo;
+            const logoSrc = logo ? `${import.meta.env.BASE_URL}${logo}` : undefined;
+
+            return (
+              <li class="animate">
               <div class="text-md opacity-75">
                 {dateRange(entry.data.dateStart, entry.data.dateEnd, lang)}
               </div>
-              <div class="text-3xl tracking-wide font-semibold text-black dark:text-white">
-                {entry.data.company}
+              <div class="mt-1 flex items-center gap-3">
+                {logoSrc ? (
+                  <img
+                    src={logoSrc}
+                    alt={`${entry.data.company} logo`}
+                    class="h-7 w-auto max-w-28 shrink-0 object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="text-3xl tracking-wide font-semibold text-black dark:text-white">
+                    {entry.data.company}
+                  </div>
+                )}
               </div>
               <div class="text-lg">{entry.data.role}</div>
               <div class="text-md opacity-75">{entry.data.summary}</div>
@@ -52,8 +68,9 @@ const work = await Promise.all(
               {index < work.length - 1 && (
                 <hr class="my-4 border-t-4 border-dotted border-gray-200 dark:border-gray-800" />
               )}
-            </li>
-          ))
+              </li>
+            );
+          })
         }
       </ul>
     </div>
