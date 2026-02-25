@@ -1,14 +1,18 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { ensureLeadingSlash, slugFromId } from "@lib/utils";
+import { ensureLeadingSlash, localeFromLang, slugFromId } from "@lib/utils";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
+  showDate?: boolean;
 };
 
-const { entry } = Astro.props;
+const { entry, showDate = false } = Astro.props;
 const lang = Astro.locals.lang;
+const locale = localeFromLang(lang);
+const day = entry.data.date.toLocaleString(locale, { day: "2-digit" });
+const month = entry.data.date.toLocaleString(locale, { month: "short" });
 ---
 
 <a
@@ -17,7 +21,17 @@ const lang = Astro.locals.lang;
   )}
   class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
 >
-  <div class="flex flex-col flex-1 truncate">
+  {
+    showDate && (
+      <div class="mr-4 grid w-12 shrink-0 place-items-center self-stretch text-black/35 dark:text-white/35">
+        <div class="flex flex-col items-center gap-1 text-center font-pixel leading-none">
+          <div class="text-base">{day}</div>
+          <div class="text-[0.58rem] uppercase tracking-[0.08em]">{month}</div>
+        </div>
+      </div>
+    )
+  }
+  <div class="flex min-w-0 flex-col flex-1 truncate">
     <div class="font-semibold">
       {entry.data.title}
     </div>
