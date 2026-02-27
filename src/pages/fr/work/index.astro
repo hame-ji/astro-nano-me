@@ -38,7 +38,7 @@ const work = await Promise.all(
       <ul class="mx-auto w-full max-w-4xl flex flex-col space-y-6">
         {
           work.map((entry) => {
-            const logo = (entry.data as { logo?: string }).logo;
+            const logo = entry.data.logo;
             return (
               <li class="animate">
                 <WorkExperienceCard
