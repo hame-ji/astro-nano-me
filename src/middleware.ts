@@ -1,9 +1,9 @@
 import { defineMiddleware } from "astro:middleware";
+import { getLangFromUrl } from "@i18n/utils";
 
 export const onRequest = defineMiddleware((context, next) => {
   const { pathname, search } = context.url;
-  const lang =
-    pathname.includes("/fr/") || pathname.endsWith("/fr") ? "fr" : "en";
+  const lang = getLangFromUrl(context.url);
   context.locals.lang = lang;
 
   if (pathname.length > 1 && pathname.endsWith("/")) {
