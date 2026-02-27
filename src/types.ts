@@ -6,11 +6,6 @@ export type Site = {
   NUM_PROJECTS_ON_HOMEPAGE: number;
 };
 
-export type Metadata = {
-  TITLE: string;
-  DESCRIPTION: string;
-};
-
 export type Socials = {
   NAME: string;
   HREF: string;
