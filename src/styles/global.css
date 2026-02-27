@@ -75,3 +75,26 @@ html #back-to-top {
 html.scrolled #back-to-top {
   @apply opacity-100 pointer-events-auto;
 }
+
+.footer-name-terminal {
+  display: inline-block;
+  margin-left: 0.3rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  letter-spacing: 0.02em;
+}
+
+.footer-name-char {
+  display: inline-flex;
+  justify-content: center;
+  align-items: baseline;
+  line-height: inherit;
+  white-space: pre;
+}
+
+.footer-name-char.is-scrambled {
+  opacity: 0.55;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.78em;
+  line-height: inherit;
+}
