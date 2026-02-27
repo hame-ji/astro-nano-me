@@ -1,6 +1,9 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import { HOME } from "@consts";
+import { defaultLang } from "@i18n/ui";
+import { useTranslations } from "@i18n/utils";
+
+const t = useTranslations(defaultLang);
 
 type Context = {
   site: string;
@@ -18,8 +21,8 @@ export async function GET(context: Context) {
   );
 
   return rss({
-    title: HOME.TITLE,
-    description: HOME.DESCRIPTION,
+    title: t("metadata.home.title"),
+    description: t("metadata.home.description"),
     site: context.site,
     items: items.map((item) => ({
       title: item.data.title,
