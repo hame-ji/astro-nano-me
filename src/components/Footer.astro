@@ -2,6 +2,8 @@
 import Container from "@components/Container.astro";
 import { SITE } from "@consts";
 import BackToTop from "@components/BackToTop.astro";
+
+const footerNameChars = SITE.NAME.split("");
 ---
 
 <footer class="animate">
@@ -14,8 +16,24 @@ import BackToTop from "@components/BackToTop.astro";
     <div class="flex justify-between items-center">
       <div>
         &copy; {new Date().getFullYear()}
-        {`|`}
-        {SITE.NAME}
+        {"|"}
+        <span
+          id="footer-name-terminal"
+          class="footer-name-terminal"
+          aria-label={SITE.NAME}
+        >
+          {
+            footerNameChars.map((char) => (
+              <span
+                class="footer-name-char"
+                data-char={char}
+                aria-hidden="true"
+              >
+                {char}
+              </span>
+            ))
+          }
+        </span>
       </div>
       <div class="flex flex-wrap gap-1 items-center">
         <button
@@ -92,3 +110,17 @@ import BackToTop from "@components/BackToTop.astro";
     </div>
   </Container>
 </footer>
+
+<script>
+  import {
+    destroyFooterNameTerminal,
+    initFooterNameTerminal,
+  } from "@lib/footerNameTerminal";
+
+  const run = () => initFooterNameTerminal();
+
+  document.addEventListener("DOMContentLoaded", run);
+  document.addEventListener("astro:after-swap", run);
+  window.addEventListener("pagehide", destroyFooterNameTerminal);
+  run();
+</script>
