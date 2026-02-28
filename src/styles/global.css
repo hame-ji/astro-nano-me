@@ -79,7 +79,8 @@ html.scrolled #back-to-top {
 .footer-name-terminal {
   display: inline-block;
   margin-left: 0.3rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
   letter-spacing: 0.02em;
 }

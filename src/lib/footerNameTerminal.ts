@@ -28,8 +28,12 @@ export const initFooterNameTerminal = () => {
 
   clearActiveInterval();
 
-  const slots = [...footerName.querySelectorAll<HTMLSpanElement>(".footer-name-char")];
-  const chars = slots.map((slot) => slot.dataset.char ?? slot.textContent ?? "");
+  const slots = [
+    ...footerName.querySelectorAll<HTMLSpanElement>(".footer-name-char"),
+  ];
+  const chars = slots.map(
+    (slot) => slot.dataset.char ?? slot.textContent ?? ""
+  );
   const charCount = chars.length;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -78,7 +82,10 @@ export const initFooterNameTerminal = () => {
 
     markScrambled(charIndex, true);
     render(charIndex, randomSymbol());
-    window.setTimeout(() => render(charIndex, randomSymbol()), SCRAMBLE_STEP_ONE_MS);
+    window.setTimeout(
+      () => render(charIndex, randomSymbol()),
+      SCRAMBLE_STEP_ONE_MS
+    );
     window.setTimeout(() => {
       render(charIndex, chars[charIndex]);
       markScrambled(charIndex, false);
