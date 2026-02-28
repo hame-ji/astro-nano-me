@@ -8,11 +8,12 @@ import IntroText from "@components/IntroText.astro";
 import { dateRange } from "@lib/utils";
 import { SITE, SOCIALS } from "@consts";
 import { useTranslations } from "@i18n/utils";
+import { defaultLang } from "@i18n/ui";
 import { ensureLeadingSlash } from "@lib/utils";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
 const { lang: langProp } = Astro.props;
-const lang = langProp ?? "en";
+const lang = langProp ?? defaultLang;
 const t = useTranslations(lang);
 const localePrefix = `${lang}/`;
 

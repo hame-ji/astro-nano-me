@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { defaultLang } from "@i18n/ui";
 
 /** Derives a clean URL slug from a content entry id like "fr/01-init.md" → "01-init" */
 export function slugFromId(id: string): string {
@@ -21,7 +22,7 @@ export function ensureLeadingSlash(path: string): string {
   return `/${path}`;
 }
 
-export function formatDate(date: Date, lang = "fr") {
+export function formatDate(date: Date, lang = defaultLang) {
   return Intl.DateTimeFormat(localeFromLang(lang), {
     month: "long",
     day: "2-digit",
@@ -39,7 +40,7 @@ export function readingTime(html: string) {
 export function dateRange(
   startDate: Date,
   endDate: Date | string,
-  lang = "fr"
+  lang = defaultLang
 ): string {
   const locale = localeFromLang(lang);
   const startMonth = startDate.toLocaleString(locale, { month: "long" });
