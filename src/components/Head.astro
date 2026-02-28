@@ -11,6 +11,7 @@ import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2";
 import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
 import pressStart2P from "@fontsource/press-start-2p/files/press-start-2p-latin-400-normal.woff2";
 import { ViewTransitions } from "astro:transitions";
+import { getHreflangAlternates } from "@lib/utils";
 
 interface Props {
   title: string;
@@ -19,6 +20,9 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const alternates = Astro.site
+  ? getHreflangAlternates(Astro.url.pathname, Astro.site)
+  : [];
 
 const { title, description, image = "/nano.png" } = Astro.props;
 ---
@@ -48,6 +52,13 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Hreflang alternates -->
+{
+  alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+  ))
+}
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>

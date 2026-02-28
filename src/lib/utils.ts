@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { defaultLang } from "@i18n/ui";
+import { defaultLang, languages } from "@i18n/ui";
 
 /** Derives a clean URL slug from a content entry id like "fr/01-init.md" → "01-init" */
 export function slugFromId(id: string): string {
@@ -58,6 +58,32 @@ export function dateRange(
   }
 
   return `${startMonth} ${startYear} - ${endMonth} ${endYear} • ${getElapsedTime(startDate, endDate, lang)}`;
+}
+
+/**
+ * Generates hreflang alternate URLs for all supported languages.
+ * Swaps the lang segment in the current pathname to produce each alternate.
+ */
+export function getHreflangAlternates(
+  pathname: string,
+  site: URL
+): Array<{ lang: string; href: string }> {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const stripped = pathname.replace(base, "");
+  const segments = stripped.replace(/^\//, "").split("/");
+  const currentLang = segments[0] in languages ? segments[0] : defaultLang;
+  const pathAfterLang =
+    currentLang === segments[0]
+      ? segments.slice(1).join("/")
+      : segments.join("/");
+
+  return Object.keys(languages).map((lang) => {
+    const alternatePath = `${base}/${lang}${pathAfterLang ? `/${pathAfterLang}` : ""}`;
+    return {
+      lang,
+      href: new URL(alternatePath, site).toString(),
+    };
+  });
 }
 
 function getElapsedTime(startDate: Date, endDate: Date, lang: string): string {
