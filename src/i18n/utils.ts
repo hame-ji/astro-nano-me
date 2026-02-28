@@ -1,9 +1,15 @@
-import { ui, defaultLang } from "./ui";
+import { ui, defaultLang, languages } from "./ui";
 
-export function getLangFromUrl(url: URL) {
-  const pathname = url.pathname.replace(/\/$/, "");
-  if (pathname.endsWith("/fr") || pathname.includes("/fr/")) {
-    return "fr";
+/**
+ * Extracts the language from the first meaningful path segment,
+ * stripping the base URL prefix first.
+ */
+export function getLangFromUrl(url: URL): keyof typeof ui {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const stripped = url.pathname.replace(base, "");
+  const firstSegment = stripped.replace(/^\//, "").split("/")[0];
+  if (firstSegment in languages) {
+    return firstSegment as keyof typeof ui;
   }
   return defaultLang;
 }
