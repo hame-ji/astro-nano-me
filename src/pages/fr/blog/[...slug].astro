@@ -1,15 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import PageLayout from "@layouts/PageLayout.astro";
-import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
-import { ensureLeadingSlash, readingTime, slugFromId } from "@lib/utils";
-import BackToPrev from "@components/BackToPrev.astro";
-import { useTranslations } from "@i18n/utils";
-import { getRelativeLocaleUrl } from "astro:i18n";
-
-const lang = Astro.locals.lang;
-const t = useTranslations(lang);
+import { slugFromId } from "@lib/utils";
+import BlogPostPage from "@components/BlogPostPage.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog"))
@@ -22,37 +14,8 @@ export async function getStaticPaths() {
 }
 type Props = CollectionEntry<"blog">;
 
+const lang = Astro.locals.lang;
 const post = Astro.props;
-const { Content } = await post.render();
 ---
 
-<PageLayout
-  title={post.data.title}
-  description={post.data.description}
-  lang={lang}
->
-  <Container>
-    <div class="animate">
-      <BackToPrev href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
-        {t("backTo.blog")}
-      </BackToPrev>
-    </div>
-    <div class="space-y-1 my-10">
-      <div class="animate flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={post.data.date} lang={lang} />
-        </div>
-        &bull;
-        <div class="font-base text-sm">
-          {readingTime(post.body)}
-        </div>
-      </div>
-      <div class="animate text-2xl font-semibold text-black dark:text-white">
-        {post.data.title}
-      </div>
-    </div>
-    <article class="animate">
-      <Content />
-    </article>
-  </Container>
-</PageLayout>
+<BlogPostPage lang={lang} post={post} />
