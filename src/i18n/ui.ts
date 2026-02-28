@@ -12,7 +12,7 @@ export const ui = {
     "nav.projects": "projects",
     "home.greeting": "👋🏻",
     "home.intro":
-      "Full stack engineer now DevSecOps consultant : first and foremost driven by passion. Sharing my thoughts from time to time.",
+      "Software Engineer now DevSecOps consultant : first and foremost driven by passion. Sharing my thoughts from time to time.",
     "home.latestPosts": "Latest posts",
     "home.allPosts": "All posts",
     "home.workExperience": "Work experience",
@@ -42,7 +42,7 @@ export const ui = {
     "nav.projects": "projets",
     "home.greeting": "👋🏻",
     "home.intro":
-      "Développeur full stack maintenant consultant DevSecOps : je suis avant tout un passionné. Je partage mes pensées de temps en temps.",
+      "Software  maintenant consultant DevSecOps : je suis avant tout un passionné. Je partage mes pensées de temps en temps.",
     "home.latestPosts": "Dernières publications",
     "home.allPosts": "Toutes les publications",
     "home.workExperience": "Expériences professionnelles",
