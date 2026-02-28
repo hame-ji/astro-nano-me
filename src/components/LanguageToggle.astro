@@ -13,7 +13,8 @@ const normalizedPath = currentPath === "/" ? "" : currentPath;
 
 const baseClass =
   "flex items-center gap-1 rounded-full px-1.5 py-0.5 transition-[opacity,filter,background-color,color] duration-200 cursor-pointer";
-const activeClass = "bg-black/5 text-black/75 dark:bg-white/10 dark:text-white/80 opacity-100 blur-0";
+const activeClass =
+  "bg-black/5 text-black/75 dark:bg-white/10 dark:text-white/80 opacity-100 blur-0";
 const inactiveClass =
   "text-black/45 hover:text-black/65 dark:text-white/45 dark:hover:text-white/70 opacity-55 blur-[0.5px]";
 
@@ -31,15 +32,17 @@ const languages = [
   role="group"
   aria-label="Language switch"
 >
-  {languages.map(({ code, label, emoji, ariaLabel }) => (
-    <a
-      href={getAlternateUrl(code)}
-      class:list={[baseClass, lang === code ? activeClass : inactiveClass]}
-      aria-label={ariaLabel}
-      aria-current={lang === code ? "page" : undefined}
-    >
-      <span>{emoji}</span>
-      <span>{label}</span>
-    </a>
-  ))}
+  {
+    languages.map(({ code, label, emoji, ariaLabel }) => (
+      <a
+        href={getAlternateUrl(code)}
+        class:list={[baseClass, lang === code ? activeClass : inactiveClass]}
+        aria-label={ariaLabel}
+        aria-current={lang === code ? "page" : undefined}
+      >
+        <span>{emoji}</span>
+        <span>{label}</span>
+      </a>
+    ))
+  }
 </div>
