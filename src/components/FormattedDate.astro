@@ -1,10 +1,12 @@
 ---
+import { defaultLang } from "@i18n/ui";
+
 interface Props {
   date: Date;
   lang?: string;
 }
 
-const { date, lang = "fr" } = Astro.props;
+const { date, lang = defaultLang } = Astro.props;
 ---
 
 <time datetime={date.toISOString()}>
