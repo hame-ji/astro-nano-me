@@ -8,11 +8,10 @@ interface Props {
 
 const { content, lang } = Astro.props;
 
-const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-
 function parseLinks(
   text: string
 ): Array<{ type: "text" | "link"; value: string; href?: string }> {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   const parts: Array<{ type: "text" | "link"; value: string; href?: string }> =
     [];
   let lastIndex = 0;
