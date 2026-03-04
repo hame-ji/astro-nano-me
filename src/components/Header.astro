@@ -29,7 +29,7 @@ const homeUrl = ensureLeadingSlash(
         </div>
       </Link>
       <div class="flex gap-2 items-center">
-        <nav class="flex gap-1 text-sm">
+        <nav class="hidden sm:flex gap-1 text-sm">
           <Link href={ensureLeadingSlash(getRelativeLocaleUrl(lang, "blog"))}>
             {t("nav.blog")}
           </Link>
