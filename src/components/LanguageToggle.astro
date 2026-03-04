@@ -33,16 +33,26 @@ const languages = [
   aria-label="Language switch"
 >
   {
-    languages.map(({ code, label, emoji, ariaLabel }) => (
-      <a
-        href={getAlternateUrl(code)}
-        class:list={[baseClass, lang === code ? activeClass : inactiveClass]}
-        aria-label={ariaLabel}
-        aria-current={lang === code ? "page" : undefined}
-      >
-        <span>{emoji}</span>
-        <span>{label}</span>
-      </a>
-    ))
+    languages.map(({ code, label, emoji, ariaLabel }) =>
+      lang === code ? (
+        <span
+          class:list={[baseClass, activeClass]}
+          aria-label={ariaLabel}
+          aria-current="page"
+        >
+          <span>{emoji}</span>
+          <span>{label}</span>
+        </span>
+      ) : (
+        <a
+          href={getAlternateUrl(code)}
+          class:list={[baseClass, inactiveClass]}
+          aria-label={ariaLabel}
+        >
+          <span>{emoji}</span>
+          <span>{label}</span>
+        </a>
+      )
+    )
   }
 </div>
