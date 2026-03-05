@@ -10,6 +10,7 @@ This is the first lightweight agent guide for this repository.
 - Prefer clear, incremental PRs over large rewrites.
 - Run relevant checks before committing.
 - Document any new scripts or conventions in this file.
+- Dependency updates are managed by Renovate (`renovate.json`) with weekly maintenance and monthly major-version review.
 
 ## Task-based docs
 
