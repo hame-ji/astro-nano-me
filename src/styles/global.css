@@ -44,10 +44,6 @@
     @apply prose-headings:text-black prose-headings:dark:text-white;
   }
 
-  h5 {
-    @apply font-pixel text-xs opacity-50;
-  }
-
   article a {
     @apply font-sans text-current underline underline-offset-2;
     @apply decoration-ink-link dark:decoration-chalk-link;
@@ -61,6 +57,15 @@
 }
 
 @layer components {
+  .section-label {
+    @apply font-pixel font-bold text-[0.88rem] sm:text-[0.95rem] leading-[1.28] tracking-normal;
+    @apply text-ink-prose dark:text-chalk-body;
+  }
+
+  .section-label-uppercase {
+    @apply uppercase;
+  }
+
   .ui-surface {
     @apply relative isolate overflow-hidden rounded-lg border;
     @apply bg-transparent text-current;

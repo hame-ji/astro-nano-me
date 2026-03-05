@@ -27,10 +27,12 @@ const href = ensureLeadingSlash(
   <span class="ui-overlay ui-overlay-grain"></span>
   {
     showDate && (
-      <div class="relative z-10 mr-4 grid w-12 shrink-0 place-items-center self-stretch text-ink-subtle dark:text-chalk-subtle">
+      <div class="relative z-10 mr-4 grid w-14 shrink-0 place-items-center self-stretch text-ink-subtle dark:text-chalk-subtle">
         <div class="flex flex-col items-center gap-1 text-center font-pixel leading-none">
-          <div class="text-base">{day}</div>
-          <div class="text-[0.58rem] uppercase tracking-[0.08em]">{month}</div>
+          <div class="text-[1.2rem] font-bold">{day}</div>
+          <div class="text-[0.7rem] font-bold uppercase tracking-[0.08em]">
+            {month}
+          </div>
         </div>
       </div>
     )

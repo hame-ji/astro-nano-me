@@ -9,7 +9,7 @@ export default {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         serif: ["Lora", ...defaultTheme.fontFamily.serif],
-        pixel: ['"Press Start 2P"', "cursive"],
+        pixel: ['"Silkscreen"', "cursive"],
       },
       colors: {
         ink: {
