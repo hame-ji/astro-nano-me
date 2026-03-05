@@ -15,9 +15,8 @@ This is the first lightweight agent guide for this repository.
 
 - UI, styling, theming, typography, and visual-consistency work: read `docs/agents/design-system.md` before editing.
 - Keep this file short; place detailed conventions in `docs/agents/*.md` and link them here.
+- For tasks not listed above, check `docs/agents/` for additional guides or ask when unclear.
 
-## Notes for future iterations
+## Meta
 
-- Expand with project-specific build/test commands.
-- Add code style and directory ownership guidance.
-- Add PR template expectations if needed.
+See `docs/agents/meta.md` for pending documentation improvements and conventions for adding new task docs.
