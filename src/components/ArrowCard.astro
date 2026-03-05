@@ -13,17 +13,21 @@ const lang = Astro.locals.lang;
 const locale = localeFromLang(lang);
 const day = entry.data.date.toLocaleString(locale, { day: "2-digit" });
 const month = entry.data.date.toLocaleString(locale, { month: "short" });
+const href = ensureLeadingSlash(
+  getRelativeLocaleUrl(lang, `${entry.collection}/${slugFromId(entry.id)}`)
+);
 ---
 
 <a
-  href={ensureLeadingSlash(
-    getRelativeLocaleUrl(lang, `${entry.collection}/${slugFromId(entry.id)}`)
-  )}
-  class="relative group flex flex-nowrap py-3 px-4 pr-10 rounded-lg border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out"
+  href={href}
+  class="group ui-surface ui-surface-hover-dim flex items-center flex-nowrap py-3 px-4"
 >
+  <span class="ui-overlay ui-overlay-glow"></span>
+  <span class="ui-overlay ui-overlay-border-soft"></span>
+  <span class="ui-overlay ui-overlay-grain"></span>
   {
     showDate && (
-      <div class="mr-4 grid w-12 shrink-0 place-items-center self-stretch text-black/35 dark:text-white/35">
+      <div class="relative z-10 mr-4 grid w-12 shrink-0 place-items-center self-stretch text-ink-subtle dark:text-chalk-subtle">
         <div class="flex flex-col items-center gap-1 text-center font-pixel leading-none">
           <div class="text-base">{day}</div>
           <div class="text-[0.58rem] uppercase tracking-[0.08em]">{month}</div>
@@ -31,29 +35,31 @@ const month = entry.data.date.toLocaleString(locale, { month: "short" });
       </div>
     )
   }
-  <div class="flex min-w-0 flex-col flex-1 truncate">
+  <div class="relative z-10 flex min-w-0 flex-col flex-1 truncate">
     <div class="font-semibold">
       {entry.data.title}
     </div>
-    <div class="text-sm">
+    <div
+      class="text-sm opacity-90 group-hover:opacity-100 transition-opacity duration-200"
+    >
       {entry.data.description}
     </div>
   </div>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    class="absolute top-1/2 right-2 -translate-y-1/2 size-5 stroke-2 fill-none stroke-current"
+    class="relative z-10 ml-3 size-5 shrink-0 stroke-2 fill-none stroke-current transition-transform duration-200 ease-out motion-reduce:transition-none group-hover:translate-x-0.5"
   >
     <line
       x1="5"
       y1="12"
       x2="19"
       y2="12"
-      class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"
+      class="translate-x-3 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out motion-reduce:transition-none"
     ></line>
     <polyline
       points="12 5 19 12 12 19"
-      class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out"
+      class="-translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-out motion-reduce:transition-none"
     ></polyline>
   </svg>
 </a>
