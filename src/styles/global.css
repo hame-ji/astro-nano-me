@@ -183,6 +183,14 @@
   .dark .group:focus-within .ui-overlay-grain {
     opacity: 0.14;
   }
+
+  html #back-to-top {
+    @apply opacity-0 pointer-events-none;
+  }
+
+  html.scrolled #back-to-top {
+    @apply opacity-100 pointer-events-auto;
+  }
 }
 
 @layer utilities {
@@ -193,15 +201,5 @@
 
   .animate.show {
     @apply opacity-100 translate-y-0;
-  }
-}
-
-@layer components {
-  html #back-to-top {
-    @apply opacity-0 pointer-events-none;
-  }
-
-  html.scrolled #back-to-top {
-    @apply opacity-100 pointer-events-auto;
   }
 }
