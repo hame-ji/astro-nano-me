@@ -25,18 +25,18 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Download Pages artifact from Main Build
+      - name: Download build artifact from Main Build
         uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          path: ./github-pages-artifact
+          name: site-dist
+          path: ./dist
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
 
       - name: Upload Pages artifact for deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./github-pages-artifact
+          path: ./dist
 
       - name: Deploy to GitHub Pages
         id: deployment

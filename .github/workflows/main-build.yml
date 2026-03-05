@@ -40,7 +40,9 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
+          name: site-dist
           path: ./dist
+          if-no-files-found: error
