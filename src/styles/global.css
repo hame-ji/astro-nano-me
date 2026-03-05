@@ -21,7 +21,7 @@
     @apply font-sans antialiased;
     @apply flex flex-col;
     @apply bg-stone-100 dark:bg-stone-900;
-    @apply text-black/50 dark:text-white/75;
+    @apply text-ink-body dark:text-chalk-body;
   }
 
   header {
@@ -50,13 +50,13 @@
 
   article a {
     @apply font-sans text-current underline underline-offset-2;
-    @apply decoration-black/15 dark:decoration-white/30;
+    @apply decoration-ink-link dark:decoration-chalk-link;
     @apply transition-colors duration-300 ease-in-out;
   }
 
   article a:hover {
     @apply text-black dark:text-white;
-    @apply decoration-black/25 dark:decoration-white/50;
+    @apply decoration-ink-link-hover dark:decoration-chalk-link-hover;
   }
 }
 
