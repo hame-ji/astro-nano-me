@@ -1,41 +1,43 @@
-name: Deploy to GitHub Pages
+name: Deploy Pages
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Main Build"]
+    types:
+      - completed
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: deploy-pages-${{ github.ref }}
   cancel-in-progress: true
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Install, build, and upload site
-        uses: withastro/action@v5
-        with:
-          node-version: 22
-          package-manager: pnpm@8.6.7
-
   deploy:
-    needs: build
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Download Pages artifact from Main Build
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: ./github-pages-artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Upload Pages artifact for deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./github-pages-artifact
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
