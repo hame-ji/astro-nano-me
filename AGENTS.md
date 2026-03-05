@@ -11,6 +11,9 @@ This is the first lightweight agent guide for this repository.
 - Run relevant checks before committing.
 - Document any new scripts or conventions in this file.
 - Dependency updates are managed by Renovate (`renovate.json`) with weekly maintenance and monthly major-version review.
+- GitHub Pages deploys are gated by `Main Build` success on `main`, with deploy-time artifact validation and smoke checks.
+- A scheduled `Pages Monitor` probes production routes every 6 hours for early outage detection.
+- Shared route probing logic lives in `scripts/probe-routes.sh`; keep deploy and monitor workflows aligned through this script.
 
 ## Task-based docs
 

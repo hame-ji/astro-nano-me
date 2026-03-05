@@ -1,0 +1,30 @@
+name: Pages Monitor
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-monitor
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Probe production routes
+        env:
+          BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          ROUTES_FILE: scripts/smoke-routes.txt
+          USER_AGENT: astro-nano-monitor
+          ASSERT_LOCALES: en fr
+        run: |
+          ./scripts/probe-routes.sh

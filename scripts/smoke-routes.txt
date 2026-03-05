@@ -1,0 +1,9 @@
+/
+/en/
+/fr/
+/en/projects/
+/fr/projects/
+/en/work/
+/fr/work/
+/en/blog/
+/fr/blog/
