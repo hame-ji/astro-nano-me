@@ -40,6 +40,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Validate build output
+        run: test -f dist/index.html
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

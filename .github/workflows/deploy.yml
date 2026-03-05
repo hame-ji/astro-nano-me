@@ -18,13 +18,16 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Download build artifact from Main Build
         uses: actions/download-artifact@v4
         with:
@@ -41,3 +44,21 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Smoke test deployed routes
+        run: |
+          set -euo pipefail
+          ROOT_URL="${{ steps.deployment.outputs.page_url }}"
+          EN_URL="${ROOT_URL%/}/en/"
+          for url in "$ROOT_URL" "$EN_URL"; do
+            for attempt in 1 2 3 4 5; do
+              if curl -fsS "$url" >/dev/null; then
+                break
+              fi
+              if [ "$attempt" -eq 5 ]; then
+                echo "Smoke test failed for $url"
+                exit 1
+              fi
+              sleep 6
+            done
+          done
