@@ -37,9 +37,10 @@ probe_routes() {
 }
 
 assert_locales() {
-  local locale
+  local locale html
   for locale in "$@"; do
-    curl_get "${BASE_URL%/}/${locale}/" | grep -Eq "<html[^>]*lang=\"${locale}\"[^>]*>"
+    html="$(curl_get "${BASE_URL%/}/${locale}/")"
+    grep -Eq "<html[^>]*lang=\"${locale}\"[^>]*>" <<<"${html}"
   done
 }
 
