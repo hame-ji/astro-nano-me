@@ -9,7 +9,6 @@ import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2";
 import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
-import pressStart2P from "@fontsource/press-start-2p/files/press-start-2p-latin-400-normal.woff2";
 import { ViewTransitions } from "astro:transitions";
 import { getHreflangAlternates } from "@lib/utils";
 
@@ -42,13 +41,6 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin />
-<link
-  rel="preload"
-  href={pressStart2P}
-  as="font"
-  type="font/woff2"
-  crossorigin
-/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
