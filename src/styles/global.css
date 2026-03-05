@@ -58,7 +58,8 @@
 
 @layer components {
   .section-label {
-    @apply font-pixel font-bold text-[0.88rem] sm:text-[0.95rem] leading-[1.28] tracking-normal;
+    @apply font-pixel font-bold text-[0.88rem] sm:text-[0.95rem] leading-[1.28];
+    @apply tracking-tight sm:tracking-normal;
     @apply text-ink-prose dark:text-chalk-body;
   }
 
