@@ -40,6 +40,16 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Validate build output
+        run: test -f dist/index.html
+
+      - name: Embed smoke routes in build artifact
+        run: |
+          set -euo pipefail
+          test -s scripts/smoke-routes.txt
+          cp scripts/smoke-routes.txt dist/smoke-routes.txt
+          test -s dist/smoke-routes.txt
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
