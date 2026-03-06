@@ -1,4 +1,5 @@
 import defaultTheme from "tailwindcss/defaultTheme";
+import typography from "@tailwindcss/typography";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -9,7 +10,7 @@ export default {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         serif: ["Lora", ...defaultTheme.fontFamily.serif],
-        pixel: ['"Silkscreen"', "cursive"],
+        pixel: ["\"Silkscreen\"", "cursive"],
       },
       colors: {
         ink: {
@@ -37,5 +38,5 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [typography],
 };
