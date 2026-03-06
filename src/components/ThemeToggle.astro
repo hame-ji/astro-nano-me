@@ -79,9 +79,34 @@
 <script>
   import type { ThemeMode } from "@lib/theme/themeController";
   import { applyThemeMode } from "@lib/theme/themeController";
-  import { playThemeSwitchSound } from "@lib/sound/themeSwitchAudio";
+  import {
+    playThemeSwitchSound,
+    warmupThemeSwitchAudio,
+  } from "@lib/sound/themeSwitchAudio";
+
+  function initThemeToggleAudioWarmup() {
+    const key = "__nanoThemeToggleAudioWarmupBound";
+    const globalWindow = window as unknown as Record<string, unknown>;
+
+    if (globalWindow[key] === true) {
+      return;
+    }
+
+    globalWindow[key] = true;
+
+    const warmup = () => {
+      document.removeEventListener("pointerdown", warmup);
+      document.removeEventListener("keydown", warmup);
+      void warmupThemeSwitchAudio();
+    };
+
+    document.addEventListener("pointerdown", warmup, { passive: true });
+    document.addEventListener("keydown", warmup);
+  }
 
   function initThemeToggleSound() {
+    initThemeToggleAudioWarmup();
+
     const wrappers = document.querySelectorAll<HTMLElement>(
       "[data-theme-toggle]"
     );

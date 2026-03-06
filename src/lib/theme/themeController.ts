@@ -2,6 +2,20 @@ export type ThemeMode = "light" | "dark" | "system";
 
 const systemMediaQuery = "(prefers-color-scheme: dark)";
 
+function getStoredThemeMode(): ThemeMode {
+  const storedTheme = localStorage.getItem("theme");
+
+  if (
+    storedTheme === "light" ||
+    storedTheme === "dark" ||
+    storedTheme === "system"
+  ) {
+    return storedTheme;
+  }
+
+  return "system";
+}
+
 function applyThemeWithoutTransition(dark: boolean) {
   const css = document.createElement("style");
 
@@ -30,8 +44,7 @@ export function resolveDarkMode(mode: ThemeMode) {
 }
 
 export function applyThemeMode(mode: ThemeMode) {
-  const currentMode =
-    (localStorage.getItem("theme") as ThemeMode | null) ?? "system";
+  const currentMode = getStoredThemeMode();
   const currentDark = document.documentElement.classList.contains("dark");
   const nextDark = resolveDarkMode(mode);
 
@@ -50,6 +63,46 @@ export function applyThemeMode(mode: ThemeMode) {
 
   return {
     changed: currentDark !== nextDark,
+    nextDark,
+  };
+}
+
+export function preloadThemeMode() {
+  const mode = getStoredThemeMode();
+  const nextDark = resolveDarkMode(mode);
+  const currentDark = document.documentElement.classList.contains("dark");
+
+  if (currentDark !== nextDark) {
+    applyThemeWithoutTransition(nextDark);
+  }
+
+  return {
+    mode,
+    nextDark,
+  };
+}
+
+export function applySystemThemeChange(nextDark: boolean) {
+  if (getStoredThemeMode() !== "system") {
+    return {
+      changed: false,
+      nextDark,
+    };
+  }
+
+  const currentDark = document.documentElement.classList.contains("dark");
+
+  if (currentDark === nextDark) {
+    return {
+      changed: false,
+      nextDark,
+    };
+  }
+
+  applyThemeWithoutTransition(nextDark);
+
+  return {
+    changed: true,
     nextDark,
   };
 }

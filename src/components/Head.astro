@@ -78,6 +78,28 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
 <ViewTransitions />
 
+<script is:inline>
+  (() => {
+    try {
+      const storedTheme = localStorage.getItem("theme");
+      const mode =
+        storedTheme === "light" ||
+        storedTheme === "dark" ||
+        storedTheme === "system"
+          ? storedTheme
+          : "system";
+      const dark =
+        mode === "system"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : mode === "dark";
+
+      document.documentElement.classList.toggle("dark", dark);
+    } catch {
+      return;
+    }
+  })();
+</script>
+
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
   document.addEventListener("astro:before-swap", (e) =>
@@ -90,27 +112,56 @@ const { title, description, image = "/nano.png" } = Astro.props;
   );
 </script>
 
-<script is:inline>
+<script>
+  import {
+    applySystemThemeChange,
+    preloadThemeMode,
+  } from "@lib/theme/themeController";
+
+  const listenersStateKey = "__nanoHeadListenersBound";
+
   function init() {
-    preloadTheme();
+    preloadThemeMode();
     onScroll();
     animate();
 
     const backToTop = document.getElementById("back-to-top");
-    backToTop?.addEventListener("click", (event) => scrollToTop(event));
+    if (
+      backToTop instanceof HTMLElement &&
+      backToTop.dataset.boundTop !== "1"
+    ) {
+      backToTop.dataset.boundTop = "1";
+      backToTop.addEventListener("click", (event) => scrollToTop(event));
+    }
 
     const backToPrev = document.getElementById("back-to-prev");
-    backToPrev?.addEventListener("click", () => window.history.back());
+    if (
+      backToPrev instanceof HTMLElement &&
+      backToPrev.dataset.boundPrev !== "1"
+    ) {
+      backToPrev.dataset.boundPrev = "1";
+      backToPrev.addEventListener("click", () => window.history.back());
+    }
+
+    bindGlobalListeners();
+  }
+
+  function bindGlobalListeners() {
+    const globalWindow = window as unknown as Record<string, unknown>;
+
+    if (globalWindow[listenersStateKey] === true) {
+      return;
+    }
+
+    globalWindow[listenersStateKey] = true;
 
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (event) => {
-        if (localStorage.theme === "system") {
-          toggleTheme(event.matches);
-        }
+        applySystemThemeChange(event.matches);
       });
 
-    document.addEventListener("scroll", onScroll);
+    document.addEventListener("scroll", onScroll, { passive: true });
   }
 
   function animate() {
@@ -131,7 +182,7 @@ const { title, description, image = "/nano.png" } = Astro.props;
     }
   }
 
-  function scrollToTop(event) {
+  function scrollToTop(event: Event) {
     event.preventDefault();
     window.scrollTo({
       top: 0,
@@ -139,45 +190,7 @@ const { title, description, image = "/nano.png" } = Astro.props;
     });
   }
 
-  function toggleTheme(dark) {
-    const css = document.createElement("style");
-
-    css.appendChild(
-      document.createTextNode(
-        `* {
-             -webkit-transition: none !important;
-             -moz-transition: none !important;
-             -o-transition: none !important;
-             -ms-transition: none !important;
-             transition: none !important;
-          }
-        `
-      )
-    );
-
-    document.head.appendChild(css);
-
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
-    window.getComputedStyle(css).opacity;
-    document.head.removeChild(css);
-  }
-
-  function preloadTheme() {
-    const userTheme = localStorage.theme;
-
-    if (userTheme === "light" || userTheme === "dark") {
-      toggleTheme(userTheme === "dark");
-    } else {
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
-  }
-
   document.addEventListener("DOMContentLoaded", () => init());
   document.addEventListener("astro:after-swap", () => init());
-  preloadTheme();
+  preloadThemeMode();
 </script>

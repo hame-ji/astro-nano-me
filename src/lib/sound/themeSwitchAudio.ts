@@ -35,6 +35,7 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
 };
 
 let audioContext: AudioContext | null = null;
+let warmupPromise: Promise<void> | null = null;
 
 function getAudioContext() {
   if (audioContext !== null) {
@@ -45,12 +46,27 @@ function getAudioContext() {
   return audioContext;
 }
 
-export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
+async function ensureAudioContextReady() {
   const context = getAudioContext();
 
   if (context.state === "suspended") {
     await context.resume();
   }
+
+  return context;
+}
+
+export function warmupThemeSwitchAudio() {
+  if (warmupPromise !== null) {
+    return warmupPromise;
+  }
+
+  warmupPromise = ensureAudioContextReady().then(() => undefined);
+  return warmupPromise;
+}
+
+export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
+  const context = await ensureAudioContextReady();
 
   const profile = soundProfiles[preset];
   const sampleRate = context.sampleRate;
