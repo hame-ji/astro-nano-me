@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   html {
@@ -65,6 +65,15 @@
 
   .section-label-uppercase {
     @apply uppercase;
+  }
+
+  .ui-control {
+    @apply cursor-pointer;
+  }
+
+  .ui-control:disabled,
+  .ui-control[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 
   .ui-surface {
