@@ -11,6 +11,10 @@ type SoundProfile = {
   gain: number;
 };
 
+type PrecomputedSound = {
+  duration: number;
+  channelData: Float32Array;
+};
 const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
   on: {
     duration: 0.1,
@@ -34,45 +38,14 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
   },
 };
 
+const precomputedSounds = new Map<ThemeSoundPreset, PrecomputedSound>();
+const audioBuffers = new Map<ThemeSoundPreset, AudioBuffer>();
 let audioContext: AudioContext | null = null;
-let warmupPromise: Promise<void> | null = null;
 
-function getAudioContext() {
-  if (audioContext !== null) {
-    return audioContext;
-  }
-
-  audioContext = new AudioContext();
-  return audioContext;
-}
-
-async function ensureAudioContextReady() {
-  const context = getAudioContext();
-
-  if (context.state === "suspended") {
-    await context.resume();
-  }
-
-  return context;
-}
-
-export function warmupThemeSwitchAudio() {
-  if (warmupPromise !== null) {
-    return warmupPromise;
-  }
-
-  warmupPromise = ensureAudioContextReady().then(() => undefined);
-  return warmupPromise;
-}
-
-export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
-  const context = await ensureAudioContextReady();
-
-  const profile = soundProfiles[preset];
-  const sampleRate = context.sampleRate;
+function precomputeSound(profile: SoundProfile) {
+  const sampleRate = 44100;
   const frameCount = Math.floor(sampleRate * profile.duration);
-  const buffer = context.createBuffer(1, frameCount, sampleRate);
-  const channel = buffer.getChannelData(0);
+  const channelData = new Float32Array(frameCount);
 
   for (let index = 0; index < frameCount; index += 1) {
     const time = index / sampleRate;
@@ -83,10 +56,123 @@ export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
       Math.sin(2 * Math.PI * profile.knockFrequency * time) *
       Math.exp(-time * profile.knockDecay);
 
-    channel[index] =
+    channelData[index] =
       (click * profile.clickMix + knock * profile.knockMix) * profile.gain;
   }
 
+  return {
+    duration: profile.duration,
+    channelData,
+  };
+}
+
+function getPrecomputedSound(preset: ThemeSoundPreset) {
+  const existing = precomputedSounds.get(preset);
+
+  if (existing !== undefined) {
+    return existing;
+  }
+
+  const next = precomputeSound(soundProfiles[preset]);
+  precomputedSounds.set(preset, next);
+  return next;
+}
+
+getPrecomputedSound("on");
+getPrecomputedSound("off");
+
+function getAudioContext() {
+  if (audioContext !== null) {
+    return audioContext;
+  }
+
+  try {
+    audioContext = new AudioContext();
+  } catch {
+    return null;
+  }
+
+  return audioContext;
+}
+
+async function ensureAudioContextReady() {
+  const context = getAudioContext();
+
+  if (context === null) {
+    return null;
+  }
+
+  if (context.state === "suspended") {
+    try {
+      await context.resume();
+    } catch {
+      return null;
+    }
+  }
+
+  return context.state === "running" ? context : null;
+}
+
+function getAudioBuffer(context: AudioContext, preset: ThemeSoundPreset) {
+  const existing = audioBuffers.get(preset);
+
+  if (existing !== undefined) {
+    return existing;
+  }
+
+  const sound = getPrecomputedSound(preset);
+
+  try {
+    const frameCount = Math.floor(context.sampleRate * sound.duration);
+    const buffer = context.createBuffer(1, frameCount, context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    const source = sound.channelData;
+    const lastIndex = source.length - 1;
+
+    for (let index = 0; index < frameCount; index += 1) {
+      const sourceIndex = Math.min(
+        Math.floor((index / frameCount) * source.length),
+        lastIndex
+      );
+      channel[index] = source[sourceIndex] ?? 0;
+    }
+
+    audioBuffers.set(preset, buffer);
+    return buffer;
+  } catch {
+    return null;
+  }
+}
+
+async function primeThemeSwitchBuffers() {
+  const context = await ensureAudioContextReady();
+
+  if (context === null) {
+    return null;
+  }
+
+  getAudioBuffer(context, "on");
+  getAudioBuffer(context, "off");
+
+  return context;
+}
+
+export async function warmupThemeSwitchAudio() {
+  await primeThemeSwitchBuffers();
+}
+
+export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
+  const context = await primeThemeSwitchBuffers();
+
+  if (context === null) {
+    return;
+  }
+
+  const buffer = getAudioBuffer(context, preset);
+
+  if (buffer === null) {
+    return;
+  }
   const source = context.createBufferSource();
   source.buffer = buffer;
   source.connect(context.destination);

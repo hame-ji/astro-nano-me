@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   html {
@@ -57,6 +57,7 @@
 }
 
 @layer components {
+  /* Shared labels */
   .section-label {
     @apply font-pixel font-bold text-[0.88rem] sm:text-[0.95rem] leading-[1.28];
     @apply tracking-tight sm:tracking-normal;
@@ -67,6 +68,40 @@
     @apply uppercase;
   }
 
+  /* Shared interactive controls */
+  .ui-control {
+    @apply cursor-pointer;
+  }
+
+  .ui-control:disabled,
+  .ui-control[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  .ui-icon-button {
+    @apply size-8 cursor-pointer flex items-center justify-center rounded-full;
+  }
+
+  .ui-toggle-option {
+    @apply flex items-center gap-1 rounded-full px-1.5 py-0.5;
+    @apply transition-[opacity,filter,background-color,color] duration-200;
+  }
+
+  .ui-toggle-option-link {
+    @apply cursor-pointer;
+  }
+
+  .ui-toggle-option-active {
+    @apply bg-ink/5 text-ink-body opacity-100 blur-none;
+    @apply dark:bg-chalk/10 dark:text-chalk-heading;
+  }
+
+  .ui-toggle-option-inactive {
+    @apply text-ink-meta opacity-55 blur-[0.5px];
+    @apply hover:text-ink-prose dark:text-chalk-meta dark:hover:text-chalk-body;
+  }
+
+  /* Shared interactive surfaces */
   .ui-surface {
     @apply relative isolate overflow-hidden rounded-lg border;
     @apply bg-transparent text-current;
@@ -113,6 +148,7 @@
     box-shadow: 0 10px 24px -22px rgba(226, 232, 240, 0.12);
   }
 
+  /* Shared overlay effects */
   .ui-overlay {
     @apply pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 motion-reduce:transition-none;
   }
@@ -185,6 +221,7 @@
     opacity: 0.14;
   }
 
+  /* Shared document state hooks */
   html #back-to-top {
     @apply opacity-0 pointer-events-none;
   }

@@ -1,12 +1,12 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://hame-ji.github.io/astro-nano-me",
   base: "/astro-nano-me",
   trailingSlash: "never",
-  integrations: [mdx(), tailwind()],
+  integrations: [mdx()],
   i18n: {
     locales: ["en", "fr"],
     defaultLocale: "en",
@@ -14,5 +14,8 @@ export default defineConfig({
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
     },
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });
