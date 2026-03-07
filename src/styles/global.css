@@ -67,6 +67,15 @@
     @apply uppercase;
   }
 
+  .ui-control {
+    @apply cursor-pointer;
+  }
+
+  .ui-control:disabled,
+  .ui-control[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   .ui-surface {
     @apply relative isolate overflow-hidden rounded-lg border;
     @apply bg-transparent text-current;
