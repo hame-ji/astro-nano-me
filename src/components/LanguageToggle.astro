@@ -11,13 +11,6 @@ const stripped = pathWithoutBase.replace(/^\/(en|fr)(?=\/|$)/, "");
 const currentPath = stripped.replace(/\/$/, "") || "/";
 const normalizedPath = currentPath === "/" ? "" : currentPath;
 
-const baseClass =
-  "flex items-center gap-1 rounded-full px-1.5 py-0.5 transition-[opacity,filter,background-color,color] duration-200 cursor-pointer";
-const activeClass =
-  "bg-ink/5 text-ink-body dark:bg-chalk/10 dark:text-chalk-heading opacity-100 blur-0";
-const inactiveClass =
-  "text-ink-meta hover:text-ink-prose dark:text-chalk-meta dark:hover:text-chalk-body opacity-55 blur-[0.5px]";
-
 const getAlternateUrl = (targetLang: string) =>
   ensureLeadingSlash(getRelativeLocaleUrl(targetLang, normalizedPath));
 
@@ -36,7 +29,7 @@ const languages = [
     languages.map(({ code, label, emoji, ariaLabel }) =>
       lang === code ? (
         <span
-          class:list={[baseClass, activeClass]}
+          class:list={["ui-toggle-option", "ui-toggle-option-active"]}
           aria-label={ariaLabel}
           aria-current="page"
         >
@@ -46,7 +39,11 @@ const languages = [
       ) : (
         <a
           href={getAlternateUrl(code)}
-          class:list={[baseClass, inactiveClass]}
+          class:list={[
+            "ui-toggle-option",
+            "ui-toggle-option-link",
+            "ui-toggle-option-inactive",
+          ]}
           aria-label={ariaLabel}
         >
           <span>{emoji}</span>
