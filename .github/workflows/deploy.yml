@@ -46,19 +46,26 @@ jobs:
         uses: actions/deploy-pages@v4
 
       - name: Smoke test deployed routes
+        env:
+          ROOT_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           set -euo pipefail
-          ROOT_URL="${{ steps.deployment.outputs.page_url }}"
-          EN_URL="${ROOT_URL%/}/en/"
-          for url in "$ROOT_URL" "$EN_URL"; do
-            for attempt in 1 2 3 4 5; do
-              if curl -fsS "$url" >/dev/null; then
-                break
-              fi
-              if [ "$attempt" -eq 5 ]; then
-                echo "Smoke test failed for $url"
-                exit 1
-              fi
-              sleep 6
-            done
+
+          routes=(
+            "/"
+            "/en/"
+            "/fr/"
+            "/en/projects/"
+            "/fr/projects/"
+            "/en/work/"
+            "/fr/work/"
+            "/en/blog/"
+            "/fr/blog/"
+          )
+
+          for route in "${routes[@]}"; do
+            curl --fail --show-error --silent \
+              --retry 5 --retry-delay 6 --retry-all-errors \
+              -H "User-Agent: astro-nano-smoke-test" \
+              "${ROOT_URL%/}${route}"
           done
