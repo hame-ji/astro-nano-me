@@ -1,7 +1,7 @@
 <div class="flex flex-wrap items-center gap-1" data-theme-toggle>
   <button
     aria-label="Light theme"
-    class="group size-8 flex items-center justify-center rounded-full"
+    class="group ui-control size-8 flex items-center justify-center rounded-full"
     data-theme-mode="light"
     type="button"
   >
@@ -31,7 +31,7 @@
 
   <button
     aria-label="Dark theme"
-    class="group size-8 flex items-center justify-center rounded-full"
+    class="group ui-control size-8 flex items-center justify-center rounded-full"
     data-theme-mode="dark"
     type="button"
   >
@@ -53,7 +53,7 @@
 
   <button
     aria-label="System theme"
-    class="group size-8 flex items-center justify-center rounded-full"
+    class="group ui-control size-8 flex items-center justify-center rounded-full"
     data-theme-mode="system"
     type="button"
   >
@@ -79,34 +79,9 @@
 <script>
   import type { ThemeMode } from "@lib/theme/themeController";
   import { applyThemeMode } from "@lib/theme/themeController";
-  import {
-    playThemeSwitchSound,
-    warmupThemeSwitchAudio,
-  } from "@lib/sound/themeSwitchAudio";
-
-  function initThemeToggleAudioWarmup() {
-    const key = "__nanoThemeToggleAudioWarmupBound";
-    const globalWindow = window as unknown as Record<string, unknown>;
-
-    if (globalWindow[key] === true) {
-      return;
-    }
-
-    globalWindow[key] = true;
-
-    const warmup = () => {
-      document.removeEventListener("pointerdown", warmup);
-      document.removeEventListener("keydown", warmup);
-      void warmupThemeSwitchAudio();
-    };
-
-    document.addEventListener("pointerdown", warmup, { passive: true });
-    document.addEventListener("keydown", warmup);
-  }
+  import { playThemeSwitchSound } from "@lib/sound/themeSwitchAudio";
 
   function initThemeToggleSound() {
-    initThemeToggleAudioWarmup();
-
     const wrappers = document.querySelectorAll<HTMLElement>(
       "[data-theme-toggle]"
     );
@@ -123,7 +98,13 @@
       );
 
       buttons.forEach((button) => {
-        button.addEventListener("click", async () => {
+        if (button.dataset.toggleBound === "true") {
+          return;
+        }
+
+        button.dataset.toggleBound = "true";
+
+        const applyModeFromGesture = async () => {
           const mode = button.dataset.themeMode as ThemeMode | undefined;
 
           if (mode === undefined) {
@@ -137,6 +118,26 @@
           }
 
           await playThemeSwitchSound(nextDark ? "off" : "on");
+        };
+
+        button.addEventListener("pointerdown", (event) => {
+          if (event.button !== 0 || !event.isPrimary) {
+            return;
+          }
+
+          button.dataset.suppressClick = "true";
+          event.preventDefault();
+          void applyModeFromGesture();
+        });
+
+        button.addEventListener("click", (event) => {
+          if (button.dataset.suppressClick === "true") {
+            button.dataset.suppressClick = "false";
+            event.preventDefault();
+            return;
+          }
+
+          void applyModeFromGesture();
         });
       });
     });

@@ -2,8 +2,24 @@ export type ThemeMode = "light" | "dark" | "system";
 
 const systemMediaQuery = "(prefers-color-scheme: dark)";
 
+function readStoredTheme(): string | null {
+  try {
+    return localStorage.getItem("theme");
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredTheme(mode: ThemeMode) {
+  try {
+    localStorage.setItem("theme", mode);
+  } catch {
+    return;
+  }
+}
+
 function getStoredThemeMode(): ThemeMode {
-  const storedTheme = localStorage.getItem("theme");
+  const storedTheme = readStoredTheme();
 
   if (
     storedTheme === "light" ||
@@ -33,7 +49,7 @@ function applyThemeWithoutTransition(dark: boolean) {
 
   document.head.appendChild(css);
   document.documentElement.classList.toggle("dark", dark);
-  window.getComputedStyle(css).opacity;
+  void window.getComputedStyle(css).opacity;
   document.head.removeChild(css);
 }
 
@@ -55,7 +71,7 @@ export function applyThemeMode(mode: ThemeMode) {
     };
   }
 
-  localStorage.setItem("theme", mode);
+  writeStoredTheme(mode);
 
   if (currentDark !== nextDark) {
     applyThemeWithoutTransition(nextDark);
