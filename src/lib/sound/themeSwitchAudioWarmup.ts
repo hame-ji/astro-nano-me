@@ -28,6 +28,6 @@ export function installThemeSwitchAudioWarmup() {
 
   document.addEventListener("pointerdown", warmup, { passive: true });
   document.addEventListener("touchstart", warmup, { passive: true });
-  document.addEventListener("keydown", warmup);
+  document.addEventListener("keydown", warmup, { passive: true });
   document.addEventListener("wheel", warmup, { passive: true });
 }
