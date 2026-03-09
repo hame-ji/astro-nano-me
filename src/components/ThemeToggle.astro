@@ -1,7 +1,7 @@
 <div class="flex flex-wrap items-center gap-1" data-theme-toggle>
   <button
     aria-label="Light theme"
-    class="group ui-control size-8 flex items-center justify-center rounded-full"
+    class="group ui-icon-button"
     data-theme-mode="light"
     type="button"
   >
@@ -31,7 +31,7 @@
 
   <button
     aria-label="Dark theme"
-    class="group ui-control size-8 flex items-center justify-center rounded-full"
+    class="group ui-icon-button"
     data-theme-mode="dark"
     type="button"
   >
@@ -53,7 +53,7 @@
 
   <button
     aria-label="System theme"
-    class="group ui-control size-8 flex items-center justify-center rounded-full"
+    class="group ui-icon-button"
     data-theme-mode="system"
     type="button"
   >
@@ -103,6 +103,19 @@
         }
 
         button.dataset.toggleBound = "true";
+        let suppressClick = false;
+        let suppressResetHandle: number | null = null;
+
+        const scheduleSuppressClickReset = () => {
+          if (suppressResetHandle !== null) {
+            window.clearTimeout(suppressResetHandle);
+          }
+
+          suppressResetHandle = window.setTimeout(() => {
+            suppressClick = false;
+            suppressResetHandle = null;
+          }, 1200);
+        };
 
         const applyModeFromGesture = async () => {
           const mode = button.dataset.themeMode as ThemeMode | undefined;
@@ -125,14 +138,19 @@
             return;
           }
 
-          button.dataset.suppressClick = "true";
+          suppressClick = true;
+          scheduleSuppressClickReset();
           event.preventDefault();
           void applyModeFromGesture();
         });
 
         button.addEventListener("click", (event) => {
-          if (button.dataset.suppressClick === "true") {
-            button.dataset.suppressClick = "false";
+          if (suppressClick) {
+            suppressClick = false;
+            if (suppressResetHandle !== null) {
+              window.clearTimeout(suppressResetHandle);
+              suppressResetHandle = null;
+            }
             event.preventDefault();
             return;
           }
