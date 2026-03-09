@@ -79,7 +79,10 @@
 <script>
   import type { ThemeMode } from "@lib/theme/themeController";
   import { applyThemeMode } from "@lib/theme/themeController";
-  import { playThemeSwitchSound } from "@lib/sound/themeSwitchAudio";
+  import {
+    playThemeSwitchSound,
+    warmupThemeSwitchAudio,
+  } from "@lib/sound/themeSwitchAudio";
 
   function initThemeToggleSound() {
     const wrappers = document.querySelectorAll<HTMLElement>(
@@ -117,7 +120,11 @@
           }, 1200);
         };
 
-        const applyModeFromGesture = async () => {
+        const prewarmAudio = () => {
+          void warmupThemeSwitchAudio();
+        };
+
+        const applyModeFromGesture = () => {
           const mode = button.dataset.themeMode as ThemeMode | undefined;
 
           if (mode === undefined) {
@@ -130,14 +137,23 @@
             return;
           }
 
-          await playThemeSwitchSound(nextDark ? "off" : "on");
+          playThemeSwitchSound(nextDark ? "off" : "on");
         };
+
+        button.addEventListener("pointerenter", prewarmAudio, {
+          passive: true,
+        });
+        button.addEventListener("touchstart", prewarmAudio, {
+          passive: true,
+        });
+        button.addEventListener("focus", prewarmAudio);
 
         button.addEventListener("pointerdown", (event) => {
           if (event.button !== 0 || !event.isPrimary) {
             return;
           }
 
+          prewarmAudio();
           suppressClick = true;
           scheduleSuppressClickReset();
           event.preventDefault();

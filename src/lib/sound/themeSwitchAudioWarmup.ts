@@ -17,17 +17,47 @@ export function installThemeSwitchAudioWarmup() {
   }
 
   globalWindow[audioWarmupStateKey] = true;
+  let warmedUp = false;
+  let warmingUp = false;
 
   const warmup = () => {
-    warmupEvents.forEach((eventName) => {
-      document.removeEventListener(eventName, warmup);
-    });
+    if (warmedUp || warmingUp) {
+      return;
+    }
 
-    void warmupThemeSwitchAudio();
+    warmingUp = true;
+
+    void warmupThemeSwitchAudio()
+      .then((ready) => {
+        if (!ready) {
+          return;
+        }
+
+        warmedUp = true;
+
+        warmupEvents.forEach((eventName) => {
+          document.removeEventListener(eventName, warmup, { capture: true });
+        });
+      })
+      .finally(() => {
+        warmingUp = false;
+      });
   };
 
-  document.addEventListener("pointerdown", warmup, { passive: true });
-  document.addEventListener("touchstart", warmup, { passive: true });
-  document.addEventListener("keydown", warmup, { passive: true });
-  document.addEventListener("wheel", warmup, { passive: true });
+  document.addEventListener("pointerdown", warmup, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("touchstart", warmup, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("keydown", warmup, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("wheel", warmup, {
+    passive: true,
+    capture: true,
+  });
 }

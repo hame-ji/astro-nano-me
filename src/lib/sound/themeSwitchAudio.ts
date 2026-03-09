@@ -41,7 +41,7 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
 const precomputedSounds = new Map<ThemeSoundPreset, PrecomputedSound>();
 const audioBuffers = new Map<ThemeSoundPreset, AudioBuffer>();
 let audioContext: AudioContext | null = null;
-let warmupPromise: Promise<AudioContext | null> | null = null;
+let resumePromise: Promise<AudioContext | null> | null = null;
 
 function precomputeSound(profile: SoundProfile) {
   const sampleRate = 44100;
@@ -103,15 +103,23 @@ async function ensureAudioContextReady() {
     return null;
   }
 
-  if (context.state === "suspended") {
-    try {
-      await context.resume();
-    } catch {
-      return null;
-    }
+  if (context.state === "running") {
+    return context;
   }
 
-  return context.state === "running" ? context : null;
+  if (resumePromise !== null) {
+    return resumePromise;
+  }
+
+  resumePromise = context
+    .resume()
+    .then(() => (context.state === "running" ? context : null))
+    .catch(() => null)
+    .finally(() => {
+      resumePromise = null;
+    });
+
+  return resumePromise;
 }
 
 function getAudioBuffer(context: AudioContext, preset: ThemeSoundPreset) {
@@ -146,7 +154,7 @@ function getAudioBuffer(context: AudioContext, preset: ThemeSoundPreset) {
 }
 
 async function primeThemeSwitchBuffers() {
-  const context = await ensureAudioContextReady();
+  const context = getAudioContext();
 
   if (context === null) {
     return null;
@@ -155,33 +163,74 @@ async function primeThemeSwitchBuffers() {
   getAudioBuffer(context, "on");
   getAudioBuffer(context, "off");
 
-  return context;
+  return ensureAudioContextReady();
 }
 
 export async function warmupThemeSwitchAudio() {
-  if (warmupPromise !== null) {
-    await warmupPromise;
-    return;
-  }
-
-  warmupPromise = primeThemeSwitchBuffers().catch(() => null);
-  await warmupPromise;
+  const context = await primeThemeSwitchBuffers();
+  return context !== null;
 }
 
-export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
-  const context = await primeThemeSwitchBuffers();
+function startBufferPlayback(context: AudioContext, buffer: AudioBuffer) {
+  try {
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.start();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function playThemeSwitchSound(preset: ThemeSoundPreset) {
+  const context = getAudioContext();
 
   if (context === null) {
     return;
   }
+
+  getAudioBuffer(context, "on");
+  getAudioBuffer(context, "off");
 
   const buffer = getAudioBuffer(context, preset);
 
   if (buffer === null) {
     return;
   }
-  const source = context.createBufferSource();
-  source.buffer = buffer;
-  source.connect(context.destination);
-  source.start();
+
+  if (context.state !== "running") {
+    void ensureAudioContextReady().then((readyContext) => {
+      if (readyContext === null) {
+        return;
+      }
+
+      const retryBuffer = getAudioBuffer(readyContext, preset);
+
+      if (retryBuffer === null) {
+        return;
+      }
+
+      startBufferPlayback(readyContext, retryBuffer);
+    });
+    return;
+  }
+
+  if (startBufferPlayback(context, buffer)) {
+    return;
+  }
+
+  void ensureAudioContextReady().then((readyContext) => {
+    if (readyContext === null) {
+      return;
+    }
+
+    const retryBuffer = getAudioBuffer(readyContext, preset);
+
+    if (retryBuffer === null) {
+      return;
+    }
+
+    startBufferPlayback(readyContext, retryBuffer);
+  });
 }
