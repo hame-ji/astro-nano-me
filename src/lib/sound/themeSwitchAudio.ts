@@ -24,7 +24,7 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
     knockFrequency: 240,
     knockDecay: 62,
     knockMix: 0.015,
-    gain: 0.077,
+    gain: 0.096,
   },
   off: {
     duration: 0.11,
@@ -34,7 +34,7 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
     knockFrequency: 200,
     knockDecay: 58,
     knockMix: 0.017,
-    gain: 0.08,
+    gain: 0.1,
   },
 };
 
