@@ -41,6 +41,7 @@ const soundProfiles: Record<ThemeSoundPreset, SoundProfile> = {
 const precomputedSounds = new Map<ThemeSoundPreset, PrecomputedSound>();
 const audioBuffers = new Map<ThemeSoundPreset, AudioBuffer>();
 let audioContext: AudioContext | null = null;
+let warmupPromise: Promise<AudioContext | null> | null = null;
 
 function precomputeSound(profile: SoundProfile) {
   const sampleRate = 44100;
@@ -158,7 +159,13 @@ async function primeThemeSwitchBuffers() {
 }
 
 export async function warmupThemeSwitchAudio() {
-  await primeThemeSwitchBuffers();
+  if (warmupPromise !== null) {
+    await warmupPromise;
+    return;
+  }
+
+  warmupPromise = primeThemeSwitchBuffers().catch(() => null);
+  await warmupPromise;
 }
 
 export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
