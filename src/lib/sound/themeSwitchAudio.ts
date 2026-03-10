@@ -95,24 +95,6 @@ function getAudioContext() {
   return audioContext;
 }
 
-async function ensureAudioContextReady() {
-  const context = getAudioContext();
-
-  if (context === null) {
-    return null;
-  }
-
-  if (context.state === "suspended") {
-    try {
-      await context.resume();
-    } catch {
-      return null;
-    }
-  }
-
-  return context.state === "running" ? context : null;
-}
-
 function getAudioBuffer(context: AudioContext, preset: ThemeSoundPreset) {
   const existing = audioBuffers.get(preset);
 
@@ -144,25 +126,8 @@ function getAudioBuffer(context: AudioContext, preset: ThemeSoundPreset) {
   }
 }
 
-async function primeThemeSwitchBuffers() {
-  const context = await ensureAudioContextReady();
-
-  if (context === null) {
-    return null;
-  }
-
-  getAudioBuffer(context, "on");
-  getAudioBuffer(context, "off");
-
-  return context;
-}
-
-export async function warmupThemeSwitchAudio() {
-  await primeThemeSwitchBuffers();
-}
-
 export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
-  const context = await primeThemeSwitchBuffers();
+  const context = getAudioContext();
 
   if (context === null) {
     return;
@@ -173,6 +138,11 @@ export async function playThemeSwitchSound(preset: ThemeSoundPreset) {
   if (buffer === null) {
     return;
   }
+
+  if (context.state !== "running") {
+    await context.resume();
+  }
+
   const source = context.createBufferSource();
   source.buffer = buffer;
   source.connect(context.destination);
