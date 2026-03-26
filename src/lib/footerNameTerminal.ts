@@ -1,10 +1,11 @@
 const SYMBOLS = ["*", "#", "$", "%", "+", "-", "?", "/", "="] as const;
-const SCRAMBLE_STEP_ONE_MS = 90;
-const SCRAMBLE_STEP_TWO_MS = 180;
-const TICK_MS = 320;
+const IDLE_TICK_MS = 1400;
+const WAVE_STEP_MS = 56;
 const SCRAMBLE_ELIGIBLE = /[a-z0-9]/i;
 
 let activeInterval: number | null = null;
+let activeTimeouts: number[] = [];
+let cleanupListeners: Array<() => void> = [];
 
 const clearActiveInterval = () => {
   if (activeInterval !== null) {
@@ -13,12 +14,27 @@ const clearActiveInterval = () => {
   }
 };
 
+const clearActiveTimeouts = () => {
+  activeTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
+  activeTimeouts = [];
+};
+
+const clearListeners = () => {
+  cleanupListeners.forEach((cleanup) => cleanup());
+  cleanupListeners = [];
+};
+
+const schedule = (callback: () => void, delayMs: number) => {
+  const timeoutId = window.setTimeout(callback, delayMs);
+  activeTimeouts.push(timeoutId);
+};
+
 const randomSymbol = () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
 
 export const initFooterNameTerminal = () => {
   const footerName = document.getElementById("footer-name-terminal");
   if (!footerName) {
-    clearActiveInterval();
+    destroyFooterNameTerminal();
     return;
   }
 
@@ -27,6 +43,8 @@ export const initFooterNameTerminal = () => {
   }
 
   clearActiveInterval();
+  clearActiveTimeouts();
+  clearListeners();
 
   const slots = [
     ...footerName.querySelectorAll<HTMLSpanElement>(".footer-name-char"),
@@ -34,14 +52,16 @@ export const initFooterNameTerminal = () => {
   const chars = slots.map(
     (slot) => slot.dataset.char ?? slot.textContent ?? ""
   );
-  const charCount = chars.length;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const eligibleIndexes = chars
+    .map((char, index) => (SCRAMBLE_ELIGIBLE.test(char) ? index : -1))
+    .filter((index) => index >= 0);
 
-  if (!charCount) return;
+  if (!chars.length) return;
 
   slots.forEach((slot, index) => {
     slot.textContent = chars[index];
-    slot.classList.remove("is-scrambled");
+    slot.classList.remove("is-scrambled", "is-pulsing");
   });
 
   window.requestAnimationFrame(() => {
@@ -53,48 +73,68 @@ export const initFooterNameTerminal = () => {
 
   footerName.setAttribute("data-initialized", "true");
 
-  if (reducedMotion.matches) return;
+  if (reducedMotion.matches || !eligibleIndexes.length) {
+    return;
+  }
 
-  let index = 0;
+  const animateChar = (charIndex: number) => {
+    const slot = slots[charIndex];
 
-  const render = (charIndex: number, replacement: string) => {
-    slots[charIndex].textContent = replacement;
+    slot.classList.add("is-pulsing", "is-scrambled");
+    slot.textContent = randomSymbol();
+
+    schedule(() => {
+      slot.textContent = randomSymbol();
+    }, 92);
+
+    schedule(() => {
+      slot.textContent = chars[charIndex];
+      slot.classList.remove("is-scrambled");
+    }, 196);
+
+    schedule(() => {
+      slot.classList.remove("is-pulsing");
+    }, 280);
   };
 
-  const markScrambled = (charIndex: number, active: boolean) => {
-    slots[charIndex].classList.toggle("is-scrambled", active);
+  let cursor = 0;
+
+  const nextEligibleIndex = () => {
+    const value = eligibleIndexes[cursor];
+    cursor = (cursor + 1) % eligibleIndexes.length;
+    return value;
   };
 
-  const nextIndex = () => {
-    for (let offset = 0; offset < charCount; offset++) {
-      const candidate = (index + offset) % charCount;
-      if (SCRAMBLE_ELIGIBLE.test(chars[candidate])) {
-        index = (candidate + 1) % charCount;
-        return candidate;
-      }
-    }
-    return -1;
+  const triggerWave = () => {
+    clearActiveTimeouts();
+    eligibleIndexes.forEach((_, step) => {
+      const charIndex = nextEligibleIndex();
+      const jitter = Math.floor(Math.random() * 12);
+      schedule(() => animateChar(charIndex), step * WAVE_STEP_MS + jitter);
+    });
   };
 
-  const tick = () => {
-    const charIndex = nextIndex();
-    if (charIndex === -1) return;
+  const onPointerEnter = () => triggerWave();
+  const onFocusIn = () => triggerWave();
+  const onTouchStart = () => triggerWave();
 
-    markScrambled(charIndex, true);
-    render(charIndex, randomSymbol());
-    window.setTimeout(
-      () => render(charIndex, randomSymbol()),
-      SCRAMBLE_STEP_ONE_MS
-    );
-    window.setTimeout(() => {
-      render(charIndex, chars[charIndex]);
-      markScrambled(charIndex, false);
-    }, SCRAMBLE_STEP_TWO_MS);
-  };
+  footerName.addEventListener("pointerenter", onPointerEnter);
+  footerName.addEventListener("focusin", onFocusIn);
+  footerName.addEventListener("touchstart", onTouchStart, { passive: true });
 
-  activeInterval = window.setInterval(tick, TICK_MS);
+  cleanupListeners.push(() => {
+    footerName.removeEventListener("pointerenter", onPointerEnter);
+    footerName.removeEventListener("focusin", onFocusIn);
+    footerName.removeEventListener("touchstart", onTouchStart);
+  });
+
+  activeInterval = window.setInterval(() => {
+    animateChar(nextEligibleIndex());
+  }, IDLE_TICK_MS);
 };
 
 export const destroyFooterNameTerminal = () => {
   clearActiveInterval();
+  clearActiveTimeouts();
+  clearListeners();
 };

@@ -22,6 +22,7 @@ const footerNameChars = SITE.NAME.split("");
           id="footer-name-terminal"
           class="footer-name-terminal"
           aria-label={SITE.NAME}
+          tabindex="0"
         >
           {
             footerNameChars.map((char) => (
@@ -45,10 +46,16 @@ const footerNameChars = SITE.NAME.split("");
   .footer-name-terminal {
     display: inline-block;
     margin-left: 0.3rem;
+    border-radius: 0.25rem;
     font-family:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     letter-spacing: 0.02em;
+    outline: none;
+  }
+
+  .footer-name-terminal:focus-visible {
+    box-shadow: 0 0 0 2px rgb(148 163 184 / 0.3);
   }
 
   .footer-name-char {
@@ -57,13 +64,42 @@ const footerNameChars = SITE.NAME.split("");
     align-items: baseline;
     line-height: inherit;
     white-space: pre;
+    opacity: 0.95;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    transition:
+      transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 220ms ease,
+      filter 220ms ease,
+      text-shadow 260ms ease;
+    will-change: transform, opacity, filter;
+  }
+
+  .footer-name-char.is-pulsing {
+    opacity: 1;
+    transform: translateY(-0.08em) scale(1.035);
+    text-shadow: 0 0 0.45rem rgb(51 65 85 / 0.24);
   }
 
   .footer-name-char.is-scrambled {
-    opacity: 0.55;
+    opacity: 0.68;
     font-family: "Silkscreen", cursive;
     font-size: 0.9em;
     line-height: inherit;
+    filter: blur(0.18px);
+  }
+
+  :global(.dark) .footer-name-char.is-pulsing {
+    text-shadow: 0 0 0.5rem rgb(226 232 240 / 0.28);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-name-char {
+      transition: none;
+      transform: none;
+      filter: none;
+      text-shadow: none;
+    }
   }
 </style>
 
